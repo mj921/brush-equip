@@ -66,6 +66,9 @@ export default class Play extends Character{
         this.maxAtk = Math.floor(this.baseMaxAtk * (100 + this.extraAtk) / 100);
         this.def = Math.floor(this.baseDef * (100 + this.extraDef) / 100);
         this.hp = Math.floor(this.baseHp * (100 + this.extraHp) / 100);
+        if (this.currHp > this.hp) {
+            this.currHp = this.hp;
+        }
         this.equips[equip.type] = equip;
         this.save();
     }
@@ -84,6 +87,9 @@ export default class Play extends Character{
         this.maxAtk = Math.floor(this.baseMaxAtk * (100 + this.extraAtk) / 100);
         this.def = Math.floor(this.baseDef * (100 + this.extraDef) / 100);
         this.hp = Math.floor(this.baseHp * (100 + this.extraHp) / 100);
+        if (this.currHp > this.hp) {
+            this.currHp = this.hp;
+        }
         this.save();
     }
     sellEquip (equip) {

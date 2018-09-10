@@ -1,5 +1,6 @@
 export default class Character{
-    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 0, hit = 50, dodge = 0, crt = 0, crtDamage = 150} = {}) {
+    constructor ({name = "你", hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 0, hit = 50, dodge = 0, crt = 0, crtDamage = 150} = {}) {
+        this.name = name;
         this.hp = hp;
         this.currHp = hp;
         this.lv = lv;
@@ -22,8 +23,10 @@ export default class Character{
         let obj = {};
         if (Math.random() * 100 < this.hit && Math.random() * 100 >= enemy.dodge) {
             let damage = (Math.random() * (this.maxAtk - this.minAtk) + this.minAtk) * (1 - enemy.getDamageRemission());
+            let crtFlag = false;
             if (Math.random() * 100 < this.crt) {
                 damage *= (this.crtDamage / 100);
+                crtFlag = true;
             }
             damage = damage > 1 ? Math.floor(damage) : 1;
             if (enemy.currHp > damage) {
@@ -31,6 +34,7 @@ export default class Character{
             } else {
                 enemy.currHp = 0;
             }
+            obj.msg = `<span style='color: ${this.color || '#F67712'};'>${this.name}</span> 对 <span style='color: ${enemy.color || '#F67712'};'>${enemy.name}</span> 造成 <span style='color: #F32020;${crtFlag ? 'font-size: 0.32rem;' : ''}'>${damage}</span> 伤害`;
         }
         obj.currHp = enemy.currHp;
         return obj;

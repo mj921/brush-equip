@@ -21,6 +21,7 @@
                 <button @click="close">关闭</button>
             </div>
             <div class="equip-info" v-show="detailVisible" @click="closeDetail">
+                <be-equip-detail class="curr-equip" v-if="!!currEquip" :equip="currEquip" btnType="unload" @unload="unloadEquip(equip.type)"></be-equip-detail>
                 <be-equip-detail :equip="equip" :btnType="btnType" @equip="equipFn(equip)" @unload="unloadEquip(equip.type)"></be-equip-detail>
             </div>
         </div>
@@ -34,7 +35,8 @@
             return {
                 detailVisible: false,
                 equip: null,
-                btnType: 'equip'
+                btnType: 'equip',
+                currEquip: null
             }
         },
         props: {
@@ -46,6 +48,11 @@
         },
         methods: {
             showEquipDetail (equip, btnType) {
+                if (btnType === "equip") {
+                    this.currEquip = this.player.equips[equip.type];
+                } else {
+                    this.currEquip = null;
+                }
                 this.detailVisible = true;
                 this.equip = equip;
                 this.btnType = btnType;
@@ -97,8 +104,12 @@
                     height: 0.45rem;
                     font-size: 0.28rem;
                     line-height: 0.45rem;
+                    span{
+                        float: left;
+                    }
                     button{
                         float: right;
+                        height: 0.4rem;
                     }
                 }
             }
@@ -112,8 +123,12 @@
                     height: 0.45rem;
                     font-size: 0.28rem;
                     line-height: 0.45rem;
+                    span{
+                        float: left;
+                    }
                     button{
                         float: right;
+                        height: 0.4rem;
                     }
                 }
             }
@@ -133,6 +148,9 @@
                     float: right;
                 }                
             }
+        }
+        .curr-equip{
+            margin-bottom: 0.1rem;
         }
     }
 </style>

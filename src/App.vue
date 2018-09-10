@@ -6,8 +6,9 @@
             <button @click="showKnapsack">背包</button>
             <button @click="showPlayerAttr">属性</button>
             <button @click="changeAutoFight">{{autoFightFlag ? '关闭自动' : '自动战斗'}}</button>
+            <button @click="initGame">重新开始</button>
         </div>
-        <be-fight-info></be-fight-info>
+        <be-fight-info :msgList="msgList"></be-fight-info>
         <be-knapsack :player="player" :visible.sync="knapsackVisible"></be-knapsack>
         <be-player-attr :player="player" :visible.sync="playerAttrVisible"></be-player-attr>
     </div>
@@ -36,7 +37,10 @@ export default {
             inBattleFlag: false,
             knapsackVisible: false,
             playerAttrVisible: false,
-            fightInfo: []
+            fightInfo: [],
+            msgList: [],
+            enemyLv: 1,
+            enemyNum: 0
         }
     },
     methods: {
@@ -53,6 +57,9 @@ export default {
             }
             let playerAtkFn = () => {
                 var ch = this.player.attack(this.enemys[currEnemyIdx]);
+                if (ch.msg) {
+                    this.log(ch.msg);
+                }
                 if (ch.currHp === 0) {
                     currEnemyIdx++;
                     if (currEnemyIdx < this.enemys.length) {
@@ -68,10 +75,14 @@ export default {
             playerSto = setTimeout(playerAtkFn, this.player.interval * 1000 / this.gameSpeed);
             let enemyAtkFn = (i) => {
                 var ch = this.enemys[i].attack(this.player);
+                if (ch.msg) {
+                    this.log(ch.msg);
+                }
                 if (ch.currHp === 0) {
                     clearSto();
                     this.loss();
                 } else {
+                    clearTimeout(enemyStos[i]);
                     enemyStos[i] = setTimeout(() => {
                         enemyAtkFn(i);
                     }, this.enemys[i].interval * 1000 / this.gameSpeed)
@@ -88,6 +99,7 @@ export default {
             this.enemys.forEach(enemy => {
                 equips.push(enemy.fallDownEquipment());
             })
+            this.log(`获得 ${equips.map(equip => '<span style="color: ' + equip.equipQuality.color + '">' + equip.getName() + '</span>').join('、')}`)
             this.player.getEquips(equips);
         },
         getExp () {
@@ -98,15 +110,35 @@ export default {
             this.player.getExp(exp);
         },
         loss () {
-            console.log("loss");
+            this.log("战斗失败");
+            if (this.enemyNum > 0) {
+                this.enemyNum--;
+            } else if (this.enemyLv > 1) {
+                this.enemyLv--;
+                this.enemyNum = 9;
+            } else {
+                this.enemyLv = 1;
+                this.enemyNum = 0;
+            }
+            localStorage.setItem("enemyLv", this.enemyLv);
+            localStorage.setItem("enemyNum", this.enemyNum);
             this.player.autoRcoveryHp(this.recoverySpeed, () => {
                 this.createEnemys();
                 this.inBattleFlag = false;
             });
         },
         victory () {
+            this.log("战斗胜利");
             this.fallDownEquipment();
             this.getExp();
+            if (this.enemyNum < 9) {
+                this.enemyNum++;
+            } else {
+                this.enemyLv++;
+                this.enemyNum = 0;
+            }
+            localStorage.setItem("enemyLv", this.enemyLv);
+            localStorage.setItem("enemyNum", this.enemyNum);
             this.player.autoRcoveryHp(this.recoverySpeed, () => {
                 this.createEnemys();
                 this.inBattleFlag = false;
@@ -144,7 +176,7 @@ export default {
             for (let i = 0; i < norProEnemySuffixArr.length; i++) {
                 currP -= norProEnemySuffixArr[i].value;
                 if (currP < 0) {
-                    this.enemys.push(new Enemy("Slime", norProEnemySuffixArr[i].key));
+                    this.enemys.push(new Enemy("Slime", norProEnemySuffixArr[i].key, this.enemyLv));
                     break;
                 }
             }
@@ -161,10 +193,19 @@ export default {
                 this.fight();
             }
             localStorage.setItem("autoFightFlag", this.autoFightFlag);
+        },
+        log (msg) {
+            this.msgList.push(msg);
+        },
+        initGame () {
+            localStorage.clear();
+            this.player = new Player();
         }
     },
     provide () {
-        return {}
+        return {
+            log: this.log
+        }
     },
     components: {
         BePlayerInfo,
@@ -208,6 +249,8 @@ export default {
             this.player.knapsack = arr;
         }
         this.autoFightFlag = (localStorage.getItem("autoFightFlag") && localStorage.getItem("autoFightFlag") !== "false") || false;
+        this.enemyLv = localStorage.getItem("enemyLv") ? +localStorage.getItem("enemyLv") : 1;
+        this.enemyNum = localStorage.getItem("enemyNum") ? +localStorage.getItem("enemyNum") : 1;
         this.createEnemys();
     }
 }

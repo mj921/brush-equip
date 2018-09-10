@@ -6,7 +6,24 @@ export default class Equip {
     constructor ({id = "ID1", accordingToId = true, quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = []}) {
         if (accordingToId) {
             this.id = id;
+            this.lv = lv;
             this.equipData = deepCopy(EquipData[id]);
+            if (this.equipData.minAtk) {
+                this.equipData.minAtk[0] = this.equipData.minAtk[0] + this.equipData.minAtk[2] * (this.lv - 1);
+                this.equipData.minAtk[1] = this.equipData.minAtk[1] + this.equipData.minAtk[3] * (this.lv - 1);
+            }
+            if (this.equipData.maxAtk) {
+                this.equipData.maxAtk[0] = this.equipData.maxAtk[0] + this.equipData.maxAtk[2] * (this.lv - 1);
+                this.equipData.maxAtk[1] = this.equipData.maxAtk[1] + this.equipData.maxAtk[3] * (this.lv - 1);
+            }
+            if (this.equipData.hp) {
+                this.equipData.hp[0] = this.equipData.hp[0] + this.equipData.hp[2] * (this.lv - 1);
+                this.equipData.hp[1] = this.equipData.hp[1] + this.equipData.hp[3] * (this.lv - 1);
+            }
+            if (this.equipData.def) {
+                this.equipData.def[0] = this.equipData.def[0] + this.equipData.def[2] * (this.lv - 1);
+                this.equipData.def[1] = this.equipData.def[1] + this.equipData.def[3] * (this.lv - 1);
+            }
             if (quality === "Inferior") {
                 Object.keys(this.equipData).forEach(key => {
                     if (this.equipData[key] instanceof Array) {
@@ -19,7 +36,6 @@ export default class Equip {
             this.equipType = this.equipData.type;
             this.quality = quality;
             this.equipQuality = EquipQuality[quality];
-            this.lv = lv;
             this.minAtk = this.equipData.minAtk ? probRandom(this.equipData.minAtk) : 0;
             this.maxAtk = this.equipData.maxAtk ? probRandom(this.equipData.maxAtk) : 0;
             this.hp = this.equipData.hp ? probRandom(this.equipData.hp) : 0;
@@ -85,49 +101,49 @@ export default class Equip {
         if (this.hp) {
             arr.push({
                 value: this.hp,
-                round: [].concat(this.equipData.hp),
+                round: [].concat(this.equipData.hp.slice(0, 2)),
                 name: "生命"
             })
         }
         if (this.def) {
             arr.push({
                 value: this.def,
-                round: [].concat(this.equipData.def),
+                round: [].concat(this.equipData.def.slice(0, 2)),
                 name: "防御"
             })
         }
         if (this.speed) {
             arr.push({
                 value: this.speed + "%",
-                round: [].concat(this.equipData.speed),
+                round: [].concat(this.equipData.speed.slice(0, 2)),
                 name: "攻击速度"
             })
         }
         if (this.hit) {
             arr.push({
                 value: this.hit + "%",
-                round: [].concat(this.equipData.hit),
+                round: [].concat(this.equipData.hit.slice(0, 2)),
                 name: "命中"
             })
         }
         if (this.dodge) {
             arr.push({
                 value: this.dodge + "%",
-                round: [].concat(this.equipData.dodge),
+                round: [].concat(this.equipData.dodge.slice(0, 2)),
                 name: "闪避"
             })
         }
         if (this.crt) {
             arr.push({
                 value: this.crt + "%",
-                round: [].concat(this.equipData.crt),
+                round: [].concat(this.equipData.crt.slice(0, 2)),
                 name: "暴击率"
             })
         }
         if (this.crtDamage) {
             arr.push({
                 value: this.crtDamage + "%",
-                round: [].concat(this.equipData.crtDamage),
+                round: [].concat(this.equipData.crtDamage.slice(0, 2)),
                 name: "暴击伤害"
             })
         }
@@ -157,7 +173,7 @@ export default class Equip {
         if (this.def) {
             arr.push({
                 value: this.def,
-                code: "baseDdef"
+                code: "baseDef"
             })
         }
         if (this.speed) {

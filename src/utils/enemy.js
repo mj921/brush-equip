@@ -14,6 +14,7 @@ export default class Enemy extends Character {
             characterData.lv = lv;
         } else {
             characterData = {
+                name: "敌人",
                 hp: 100,
                 atk: 1,
                 def: 1,
@@ -31,10 +32,12 @@ export default class Enemy extends Character {
         }
         super(characterData);
         this.exp = characterData.exp + characterData.expI * (lv - 1 + suffixObj.addLv);
+        this.exp = this.exp > 0 ? this.exp : 1;
         this.name = `[${suffixObj.name}]${characterData.name}`;
         this.enemyType = type;
         this.color = suffixObj.color;
         this.suffix = suffix;
+        this.equips = characterData.equips || [];
     }
     fallDownEquipment () {
         let proNumArr = ProbabilityArr(NormalProbabilityEnemyFallDown[this.suffix]);
@@ -50,9 +53,9 @@ export default class Enemy extends Character {
                 break;
             }
         }
-        // let equipTypeKeys = Object.keys(EquipType);
-        // let equipType = EquipType[equipTypeKeys[Math.floor(Math.random() * equipTypeKeys.length)]].name;
-        let equip = new Equip({id: "ID1", quality: equipQuality, lv: this.lv });
+        let lv = this.lv - Math.floor(Math.random() * 5);
+        lv = lv > 0 ? lv : 1;
+        let equip = new Equip({id: this.equips[Math.floor(Math.random() * this.equips.length)], quality: equipQuality, lv });
         console.log(equip);
         return equip;
     }

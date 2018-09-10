@@ -17,7 +17,7 @@ const enemyData = {
         atkI: 1,
         defI: 1,
         expI: 1,
-        equips: [EquipData.ID1]
+        equips: ["ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9"]
     }
 }
 export default enemyData;
