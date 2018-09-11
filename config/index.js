@@ -42,7 +42,7 @@ module.exports = {
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../'),
-    assetsSubDirectory: 'dist/static',
+    assetsSubDirectory: 'brush-equip/static',
     assetsPublicPath: '/',
 
     /**
