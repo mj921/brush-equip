@@ -41,9 +41,9 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../'),
-    assetsSubDirectory: 'brush-equip/static',
-    assetsPublicPath: '/',
+    assetsRoot: path.resolve(__dirname, '../dist'),
+    assetsSubDirectory: 'static',
+    assetsPublicPath: '/brush-equip',
 
     /**
      * Source Maps
