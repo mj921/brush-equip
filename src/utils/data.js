@@ -13,12 +13,12 @@ export const Color = {
 export const Suffix = {
     Puniness: {color: Color.Gray, num: 0, name: "弱小", addLv: -2},
     Normal: {color: Color.Black, num: 1, name: "普通", addLv: 0},
-    Variation: {color: Color.Green, num: 2, name: "变异", addLv: 2},
-    Elites: {color: Color.Blue, num: 3, name: "精英", addLv: 4},
-    Head: {color: Color.Violet, num: 4, name: "头目", addLv: 6},
+    Variation: {color: Color.Green, num: 2, name: "变异", addLv: 1},
+    Elites: {color: Color.Blue, num: 3, name: "精英", addLv: 2},
+    Head: {color: Color.Violet, num: 4, name: "头目", addLv: 4},
     Boss: {color: Color.Yellow, num: 5, name: "首领", addLv: 8},
-    VariationBoss: {color: Color.Red, num: 6, name: "变异首领", addLv: 10},
-    ElitesBoss: {color: Color.DarkGold, num: 7, name: "精英首领", addLv: 12}
+    VariationBoss: {color: Color.Red, num: 6, name: "变异首领", addLv: 12},
+    ElitesBoss: {color: Color.DarkGold, num: 7, name: "精英首领", addLv: 16}
 }
 // 怪物数量几率
 export const ProbabilityEnemyNum = {
@@ -61,14 +61,14 @@ export const EquipType = {
 }
 // 装备品质
 export const EquipQuality = {
-    Inferior: {name: "劣质", color: Color.Gray, additionalAttrNum: 0, code: "Inferior"},
-    Normal: {name: "普通", color: Color.Black, additionalAttrNum: 0, code: "Normal"},
-    Excellent: {name: "优秀", color: Color.Green, additionalAttrNum: 1, code: "Excellent"},
-    Polish: {name: "精良", color: Color.Blue, additionalAttrNum: 2, code: "Polish"},
-    Rare: {name: "稀有", color: Color.Violet, additionalAttrNum: 3, code: "Rare"},
-    Epic: {name: "史诗", color: Color.Yellow, additionalAttrNum: 4, code: "Epic"},
-    Legend: {name: "传说", color: Color.Red, additionalAttrNum: 5, code: "Legend"},
-    Myth: {name: "神话", color: Color.DarkGold, additionalAttrNum: 6, code: "Myth"}
+    Inferior: {name: "劣质", color: Color.Gray, additionalAttrNum: 0, code: "Inferior", attrAddition: 0.8},
+    Normal: {name: "普通", color: Color.Black, additionalAttrNum: 0, code: "Normal", attrAddition: 1},
+    Excellent: {name: "优秀", color: Color.Green, additionalAttrNum: 1, code: "Excellent", attrAddition: 1.1},
+    Polish: {name: "精良", color: Color.Blue, additionalAttrNum: 2, code: "Polish", attrAddition: 1.2},
+    Rare: {name: "稀有", color: Color.Violet, additionalAttrNum: 3, code: "Rare", attrAddition: 1.3},
+    Epic: {name: "史诗", color: Color.Yellow, additionalAttrNum: 4, code: "Epic", attrAddition: 1.5},
+    Legend: {name: "传说", color: Color.Red, additionalAttrNum: 5, code: "Legend", attrAddition: 1.7},
+    Myth: {name: "神话", color: Color.DarkGold, additionalAttrNum: 6, code: "Myth", attrAddition: 2}
 }
 // 怪物装备掉落概率
 export const NormalProbabilityEnemyFallDown = {

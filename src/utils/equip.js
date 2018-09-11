@@ -7,35 +7,24 @@ export default class Equip {
         if (accordingToId) {
             this.id = id;
             this.lv = lv;
-            this.equipData = deepCopy(EquipData[id]);
-            if (this.equipData.minAtk) {
-                this.equipData.minAtk[0] = this.equipData.minAtk[0] + this.equipData.minAtk[2] * (this.lv - 1);
-                this.equipData.minAtk[1] = this.equipData.minAtk[1] + this.equipData.minAtk[3] * (this.lv - 1);
-            }
-            if (this.equipData.maxAtk) {
-                this.equipData.maxAtk[0] = this.equipData.maxAtk[0] + this.equipData.maxAtk[2] * (this.lv - 1);
-                this.equipData.maxAtk[1] = this.equipData.maxAtk[1] + this.equipData.maxAtk[3] * (this.lv - 1);
-            }
-            if (this.equipData.hp) {
-                this.equipData.hp[0] = this.equipData.hp[0] + this.equipData.hp[2] * (this.lv - 1);
-                this.equipData.hp[1] = this.equipData.hp[1] + this.equipData.hp[3] * (this.lv - 1);
-            }
-            if (this.equipData.def) {
-                this.equipData.def[0] = this.equipData.def[0] + this.equipData.def[2] * (this.lv - 1);
-                this.equipData.def[1] = this.equipData.def[1] + this.equipData.def[3] * (this.lv - 1);
-            }
-            if (quality === "Inferior") {
-                Object.keys(this.equipData).forEach(key => {
-                    if (this.equipData[key] instanceof Array) {
-                        this.equipData[key][0] = Math.floor(this.equipData[key][0] * 0.8);
-                        this.equipData[key][1] = Math.floor(this.equipData[key][1] * 0.8);
-                    }
-                })
-            }
-            this.type = this.equipData.type.code;
-            this.equipType = this.equipData.type;
             this.quality = quality;
             this.equipQuality = EquipQuality[quality];
+            this.equipData = deepCopy(EquipData[id]);
+            let growUpAttr = ["minAtk", "maxAtk", "hp", "def"];
+            growUpAttr.forEach(attr => {
+                if (this.equipData[attr]) {
+                    this.equipData[attr][0] = this.equipData[attr][0] + this.equipData[attr][2] * (this.lv - 1);
+                    this.equipData[attr][1] = this.equipData[attr][1] + this.equipData[attr][3] * (this.lv - 1);
+                }
+            })
+            Object.keys(this.equipData).forEach(key => {
+                if (this.equipData[key] instanceof Array) {
+                    this.equipData[key][0] = Math.floor(this.equipData[key][0] * this.equipQuality.attrAddition);
+                    this.equipData[key][1] = Math.floor(this.equipData[key][1] * this.equipQuality.attrAddition);
+                }
+            })
+            this.type = this.equipData.type.code;
+            this.equipType = this.equipData.type;
             this.minAtk = this.equipData.minAtk ? probRandom(this.equipData.minAtk) : 0;
             this.maxAtk = this.equipData.maxAtk ? probRandom(this.equipData.maxAtk) : 0;
             this.hp = this.equipData.hp ? probRandom(this.equipData.hp) : 0;
