@@ -1,7 +1,7 @@
 <template>
     <div class="equip-detail">
         <div class="base-info" v-if="equip">
-            <dl :style="'color: ' + equip.getColor()">{{equip.getName()}}</dl>
+            <dl :style="'color: ' + equip.getColor()">{{equip.getName()}} (lv: {{equip.lv}})</dl>
             <dl v-for="(attr, i) in equip.getBaseInfo()" :key="i">{{attr.name}}：{{attr.value}} <span class="round">({{attr.round.join(" - ")}})</span></dl>
         </div>
         <div class="extra-info" v-if="equip && equip.extraAttr && equip.extraAttr.length > 0">

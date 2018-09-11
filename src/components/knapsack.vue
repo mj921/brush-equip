@@ -4,7 +4,7 @@
             <div class="already-equipped">
                 <dl v-for="key in Object.keys(player.equips)" :key="key">
                     <template v-if="player.equips[key]">
-                        <span :style="'color:' + player.equips[key].getColor()" @click="showEquipDetail(player.equips[key], 'unload')">{{player.equips[key].getName()}}</span>
+                        <span :style="'color:' + player.equips[key].getColor()" @click="showEquipDetail(player.equips[key], 'unload')">{{player.equips[key].getName()}} (lv: {{player.equips[key].lv}})</span>
                         <button @click="unloadEquip(key)">卸下</button>
                     </template>
                     <span v-else>未装备</span>
@@ -12,7 +12,7 @@
             </div>
             <div class="not-equip">
                 <dl v-for="(equip, i) in player.knapsack" :key="i">
-                    <span :style="'color:' + equip.getColor()" @click="showEquipDetail(equip, 'equip')">{{equip.getName()}}</span>
+                    <span :style="'color:' + equip.getColor()" @click="showEquipDetail(equip, 'equip')">{{equip.getName()}} (lv: {{equip.lv}})</span>
                     <button @click="equipFn(equip)">装备</button>
                     <button @click="sell(equip)">出售</button>
                 </dl>

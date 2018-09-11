@@ -1,6 +1,7 @@
 <template>
     <div class="player-attr" v-show="visible">
         <div class="base-info">
+            <dl>等级：{{player.lv}}</dl>
             <dl>战斗力：{{player.getCombatPower()}}</dl>
             <dl v-for="(attr, i) in player.getBaseInfo()" :key="i">{{attr.name}}：{{attr.value}}</dl>
             <button class="btn" @click="close">关闭</button>
