@@ -61,14 +61,14 @@ export const EquipType = {
 }
 // 装备品质
 export const EquipQuality = {
-    Inferior: {name: "劣质", color: Color.Gray, additionalAttrNum: 0},
-    Normal: {name: "普通", color: Color.Black, additionalAttrNum: 0},
-    Excellent: {name: "优秀", color: Color.Green, additionalAttrNum: 1},
-    Polish: {name: "精良", color: Color.Blue, additionalAttrNum: 2},
-    Rare: {name: "稀有", color: Color.Violet, additionalAttrNum: 3},
-    Epic: {name: "史诗", color: Color.Yellow, additionalAttrNum: 4},
-    Legend: {name: "传说", color: Color.Red, additionalAttrNum: 5},
-    Myth: {name: "神话", color: Color.DarkGold, additionalAttrNum: 6}
+    Inferior: {name: "劣质", color: Color.Gray, additionalAttrNum: 0, code: "Inferior"},
+    Normal: {name: "普通", color: Color.Black, additionalAttrNum: 0, code: "Normal"},
+    Excellent: {name: "优秀", color: Color.Green, additionalAttrNum: 1, code: "Excellent"},
+    Polish: {name: "精良", color: Color.Blue, additionalAttrNum: 2, code: "Polish"},
+    Rare: {name: "稀有", color: Color.Violet, additionalAttrNum: 3, code: "Rare"},
+    Epic: {name: "史诗", color: Color.Yellow, additionalAttrNum: 4, code: "Epic"},
+    Legend: {name: "传说", color: Color.Red, additionalAttrNum: 5, code: "Legend"},
+    Myth: {name: "神话", color: Color.DarkGold, additionalAttrNum: 6, code: "Myth"}
 }
 // 怪物装备掉落概率
 export const NormalProbabilityEnemyFallDown = {

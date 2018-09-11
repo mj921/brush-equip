@@ -257,7 +257,7 @@ export default {
 </script>
 
 <style lang="scss">
-    body,div,ul,ol,li,dl,h1,h2,h3,h4,h5,h6{
+    body,div,ul,ol,li,dl,h1,h2,h3,h4,h5,h6,button,input{
         vertical-align: top;
         margin: 0;
         padding: 0;
@@ -290,5 +290,19 @@ export default {
         font-size: 0.24rem;
         background-color: $white;
         border: 1px solid $gray;
+    }
+    .fl{
+        float: left;
+    }             
+    .fr{
+        float: right;
+    }      
+    .clearfix{
+        zoom: 1;
+        &:after{
+            content: "";
+            clear: both;
+            display: block;
+        }
     }
 </style>

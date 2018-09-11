@@ -17,12 +17,30 @@
                     <button @click="sell(equip)">出售</button>
                 </dl>
             </div>
-            <div class="knapsack-bottom">
-                <button @click="close">关闭</button>
+            <div class="knapsack-bottom clearfix">
+                <div class="fl">
+                    <button @click="showMultSale">批量出售</button>
+                </div>
+                <div class="fr">
+                    <button @click="close">关闭</button>
+                </div>
             </div>
             <div class="equip-info" v-show="detailVisible" @click="closeDetail">
                 <be-equip-detail class="curr-equip" v-if="!!currEquip" :equip="currEquip" btnType="unload" @unload="unloadEquip(equip.type)"></be-equip-detail>
                 <be-equip-detail :equip="equip" :btnType="btnType" @equip="equipFn(equip)" @unload="unloadEquip(equip.type)"></be-equip-detail>
+            </div>
+            <div class="equip-info" v-show="multSaleVisible" @click="closeMultSale">
+                <div class="mult-sale-container" @click="stopProp($event)">
+                    <template v-for="equipQuality in equipQualityList">
+                        <dl>
+                            <input :key="equipQuality.code" type="checkbox" v-model="equipQuality.value" :id="'multSale' + equipQuality.code"><label :for="'multSale' + equipQuality.code">{{equipQuality.name}}</label>
+                        </dl>
+                    </template>
+                    <div class="knapsack-bottom clearfix">
+                        <button @click="multSale">批量出售</button>
+                        <button @click="closeMultSale">关闭</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -30,13 +48,19 @@
 
 <script>
     import BeEquipDetail from './equipDetail.vue';
+    import { EquipQuality } from '@/utils/data';
+    import { deepCopy } from '@/utils/util';
     export default {
         data () {
             return {
                 detailVisible: false,
                 equip: null,
                 btnType: 'equip',
-                currEquip: null
+                currEquip: null,
+                multSaleVisible: false,
+                equipQualityList: Object.values(deepCopy(EquipQuality)).map(item => {
+                    return Object.assign(item, {value: false})
+                })
             }
         },
         props: {
@@ -73,6 +97,22 @@
             },
             sell (equip) {
                 this.player.sellEquip(equip);
+            },
+            closeMultSale () {
+                this.multSaleVisible = false;
+            },
+            showMultSale () {
+                this.multSaleVisible = true;
+            },
+            stopProp (e) {
+                e.stopPropagation();
+            },
+            multSale () {
+                let saleQuality = this.equipQualityList.filter(item => item.value).map(item => item.code);
+                if (saleQuality.length > 0) {
+                    let saleEquips = this.player.knapsack.filter(equip => saleQuality.indexOf(equip.quality) > -1);
+                    saleEquips.forEach(equip => {this.sell(equip)});
+                }
             }
         },
         components: {
@@ -142,11 +182,26 @@
                 padding: 0.4rem 0;
                 background-color: $maskColor;
             }
+            .mult-sale-container{
+                margin: 0 auto;
+                background-color: $white;
+                width: 5rem;
+                font-size: 0.28rem;
+                padding: 0.4rem;
+                dl{
+                    display: inline-block;
+                    width: 50%;
+                    line-height: 0.3rem;
+                    input{
+                        margin-right: 0.2rem;
+                        width: 0.3rem;
+                        height: 0.3rem;
+                        background-color: $white;
+                    }
+                }
+            }
             .knapsack-bottom{
-                padding: 0.2rem;
-                button{
-                    float: right;
-                }                
+                padding: 0.2rem;    
             }
         }
         .curr-equip{
