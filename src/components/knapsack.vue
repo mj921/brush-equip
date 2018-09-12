@@ -11,8 +11,10 @@
                 </dl>
             </div>
             <div class="not-equip">
-                <dl v-for="(equip, i) in player.knapsack" :key="i">
+                <dl v-for="(equip, i) in player.knapsack" :key="i" :data-aaa="player.getCurrEquipPower(equip) + ',' + player.getCombatPower()">
                     <span :style="'color:' + equip.getColor()" @click="showEquipDetail(equip, 'equip')">{{equip.getName()}} (lv: {{equip.lv}})</span>
+                    <span class="red-text" v-if="player.getCurrEquipPower(equip) > player.getCombatPower()">+{{player.getCurrEquipPower(equip) - player.getCombatPower()}}</span>
+                    <span class="green-text" v-else>{{player.getCurrEquipPower(equip) - player.getCombatPower()}}</span>
                     <button @click="equipFn(equip)">装备</button>
                     <button @click="sell(equip)">出售</button>
                 </dl>
@@ -165,6 +167,14 @@
                     line-height: 0.45rem;
                     span{
                         float: left;
+                        &.red-text{
+                            color: $red;
+                            margin-left: 0.2rem;
+                        }
+                        &.green-text{
+                            color: $green;
+                            margin-left: 0.2rem;
+                        }
                     }
                     button{
                         float: right;

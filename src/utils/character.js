@@ -43,7 +43,6 @@ export default class Character{
         return `hp: ${this.hp}, lv: ${this.lv}`;
     }
     getCombatPower () {
-        // return [((this.maxAtk + this.minAtk) / 2 / this.interval * (1 + this.crt * this.crtDamage / 100)) * this.hit / 100, this.hp / (1 - this.getDamageRemission()) / (100 - this.dodge) / 100];
-        return Math.floor(((this.maxAtk + this.minAtk) / 2 / this.interval * (1 + this.crt * this.crtDamage / 100)) * this.hit / 100 + this.hp / (1 - this.getDamageRemission()) / (100 - this.dodge) / 100);
+        return Math.floor(((this.maxAtk + this.minAtk) / 2 / this.interval * (1 + this.crt * this.crtDamage / 10000)) * this.hit / 100 * 10 + this.hp / (1 - this.getDamageRemission()) / (100 - this.dodge) * 5 * 10);
     }
 }

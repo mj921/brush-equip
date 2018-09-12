@@ -25,7 +25,7 @@ const EquipData = {
     ID5: {
         type: EquipType.Glove,
         lv: 1,
-        minAtk: [0, 0, 0, 0],
+        minAtk: [0, 0, 1, 1],
         maxAtk: [1, 3, 3, 4],
         def: [1, 5, 4, 5]
     },
@@ -38,15 +38,15 @@ const EquipData = {
     ID7: {
         type: EquipType.Necklace,
         lv: 1,
-        minAtk: [1, 3, 3, 4],
-        maxAtk: [2, 4, 4, 5],
-        hp: [5, 10, 10, 15]
+        hp: [5, 10, 10, 15],
+        crtDamage: [5, 10]
     },
     ID8: {
         type: EquipType.Ring,
         lv: 1,
         crt: [1, 5],
-        crtDamage: [5, 10]
+        minAtk: [1, 3, 3, 4],
+        maxAtk: [2, 4, 4, 5]
     },
     ID9: {
         type: EquipType.Trousers,

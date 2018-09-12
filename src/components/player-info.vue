@@ -1,6 +1,9 @@
 <template>
     <div class="player-info">
         <dl>
+            <span>等级：{{player.lv}}</span><span>金币：{{player.goldCoin}}</span>
+        </dl>
+        <dl>
             <label for="">HP：</label><be-hp-bar :curr="player.currHp" :max="player.hp"></be-hp-bar>
         </dl>
         <dl>
@@ -42,6 +45,10 @@
             label{
                 display: inline-block;
                 width: 0.8rem;
+            }
+            &>span{
+                display: inline-block;
+                width: 2rem;
             }
         }
     }

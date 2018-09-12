@@ -3,10 +3,16 @@
         <be-player-info :player="player"></be-player-info>
         <be-enemy-info :enemys="enemys"></be-enemy-info>
         <div class="button-group">
-            <button @click="showKnapsack">背包</button>
-            <button @click="showPlayerAttr">属性</button>
-            <button @click="changeAutoFight">{{autoFightFlag ? '关闭自动' : '自动战斗'}}</button>
-            <button @click="initGame">重新开始</button>
+            <div class="fl button-group-left">
+                <button @click="showKnapsack">背包</button>
+                <button @click="showPlayerAttr">属性</button>
+                <button @click="changeAutoFight">{{autoFightFlag ? '关闭自动' : '自动战斗'}}</button>
+                <button @click="initGame">重新开始</button>
+            </div>
+            <div class="fr button-group-right">
+                怪物等级：{{enemyLv}}<br/>
+                怪物进度：{{enemyNum}} / {{enemyNumMax}}
+            </div>
         </div>
         <be-fight-info :msgList="msgList"></be-fight-info>
         <be-knapsack :player="player" :visible.sync="knapsackVisible"></be-knapsack>
@@ -40,7 +46,8 @@ export default {
             fightInfo: [],
             msgList: [],
             enemyLv: 1,
-            enemyNum: 0
+            enemyNum: 0,
+            enemyNumMax: 10
         }
     },
     methods: {
@@ -115,7 +122,7 @@ export default {
                 this.enemyNum--;
             } else if (this.enemyLv > 1) {
                 this.enemyLv--;
-                this.enemyNum = 9;
+                this.enemyNum = this.enemyNumMax - 1;
             } else {
                 this.enemyLv = 1;
                 this.enemyNum = 0;
@@ -131,7 +138,7 @@ export default {
             this.log("战斗胜利");
             this.fallDownEquipment();
             this.getExp();
-            if (this.enemyNum < 9) {
+            if (this.enemyNum < this.enemyNumMax - 1) {
                 this.enemyNum++;
             } else {
                 this.enemyLv++;
@@ -283,6 +290,12 @@ export default {
             -moz-box-sizing: border-box;
             box-sizing: border-box;
             border: 1px solid $black;
+            .button-group-left{
+                width: 70%;
+            }
+            .button-group-right{
+                width: 30%;
+            }
         }
     }
     button{

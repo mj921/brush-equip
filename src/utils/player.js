@@ -1,6 +1,6 @@
 import Character from './character';
 import { deepCopy } from './util';
-export default class Play extends Character{
+export default class Player extends Character{
     constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 50, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0} = {}) {
         super({hp, lv, minAtk, maxAtk, def, speed, hit, dodge, crt, crtDamage});
         this.maxExp = maxExp;
@@ -43,7 +43,7 @@ export default class Play extends Character{
         this.knapsack = this.knapsack.concat(equips);
         this.save();
     }
-    equipFn (equip) {
+    equipFn (equip, saveFlag = true) {
         if (this.equips[equip.type]) {
             let oldEquip = this.equips[equip.type];
             this.knapsack.splice(this.knapsack.indexOf(equip), 1, oldEquip);
@@ -70,7 +70,9 @@ export default class Play extends Character{
             this.currHp = this.hp;
         }
         this.equips[equip.type] = equip;
-        this.save();
+        if (saveFlag) {
+            this.save();
+        }
     }
     unloadEquip (equipType) {
         if (this.equips[equipType]) {
@@ -120,6 +122,27 @@ export default class Play extends Character{
             }
         }
         _loop();
+    }
+    getCurrEquipPower (equip) {
+        let p = new Player(this);
+        if (this.equips[equip.type]) {
+            let oldEquip = this.equips[equip.type];
+            oldEquip.getBaseInfoCalculation().forEach(attr => {
+                p[attr.code] -= attr.value;
+            })
+            oldEquip.extraAttr.forEach(attr => {
+                p[attr.type.code] -= attr.value;
+            })
+        }
+        equip.getBaseInfoCalculation().forEach(attr => {
+            p[attr.code] += attr.value;
+        })
+        equip.extraAttr.forEach(attr => {
+            p[attr.type.code] += attr.value;
+        })
+        let cp = p.getCombatPower();
+        p = null;
+        return cp;
     }
     getBaseInfo () {
         let arr = [];
