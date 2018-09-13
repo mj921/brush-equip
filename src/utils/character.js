@@ -34,7 +34,7 @@ export default class Character{
             } else {
                 enemy.currHp = 0;
             }
-            obj.msg = `<span style='color: ${this.color || '#F67712'};'>${this.name}</span> 对 <span style='color: ${enemy.color || '#F67712'};'>${enemy.name}</span> 造成 <span style='color: #F32020;${crtFlag ? 'font-size: 0.32rem;' : ''}'>${damage}</span> 伤害`;
+            obj.msg = `<span style='color: ${this.color || '#F67712'};'>${this.name}</span> 对 <span style='color: ${enemy.color || '#F67712'};'>${enemy.name}</span> 造成 <span style='color: #F32020;${crtFlag ? 'font-size: 1.4em;' : ''}'>${damage}</span> 伤害`;
         }
         obj.currHp = enemy.currHp;
         return obj;

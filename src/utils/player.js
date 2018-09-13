@@ -94,7 +94,7 @@ export default class Player extends Character{
         }
         this.save();
     }
-    sellEquip (equip) {
+    saleEquip (equip) {
         this.knapsack.splice(this.knapsack.indexOf(equip), 1);
         this.save();
     }

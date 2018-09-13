@@ -15,8 +15,12 @@
                     <span :style="'color:' + equip.getColor()" @click="showEquipDetail(equip, 'equip')">{{equip.getName()}} (lv: {{equip.lv}})</span>
                     <span class="red-text" v-if="player.getCurrEquipPower(equip) > player.getCombatPower()">+{{player.getCurrEquipPower(equip) - player.getCombatPower()}}</span>
                     <span class="green-text" v-else>{{player.getCurrEquipPower(equip) - player.getCombatPower()}}</span>
-                    <button @click="equipFn(equip)">装备</button>
-                    <button @click="sell(equip)">出售</button>
+                    <div class="btn-group">
+                        <button @click="equipFn(equip)">装备</button>
+                        <button @click="equip.unlock()" v-if="equip.lockFlag">解锁</button>
+                        <button @click="equip.lock()" v-else>锁上</button>
+                        <button @click="sale(equip)">出售</button>
+                    </div>
                 </dl>
             </div>
             <div class="knapsack-bottom clearfix">
@@ -38,8 +42,10 @@
                             <input :key="equipQuality.code" type="checkbox" v-model="equipQuality.value" :id="'multSale' + equipQuality.code"><label :for="'multSale' + equipQuality.code">{{equipQuality.name}}</label>
                         </dl>
                     </template>
-                    <div class="knapsack-bottom clearfix">
+                    <div class="sale-btn-group clearfix">
                         <button @click="multSale">批量出售</button>
+                        <button @click="allSale">全部出售</button>
+                        <button @click="intelligenceSale">智能出售</button>
                         <button @click="closeMultSale">关闭</button>
                     </div>
                 </div>
@@ -97,8 +103,10 @@
                 this.player.unloadEquip(equipType);
                 this.detailVisible = false;
             },
-            sell (equip) {
-                this.player.sellEquip(equip);
+            sale (equip) {
+                if (!equip.lockFlag) {
+                    this.player.saleEquip(equip);
+                }
             },
             closeMultSale () {
                 this.multSaleVisible = false;
@@ -113,8 +121,20 @@
                 let saleQuality = this.equipQualityList.filter(item => item.value).map(item => item.code);
                 if (saleQuality.length > 0) {
                     let saleEquips = this.player.knapsack.filter(equip => saleQuality.indexOf(equip.quality) > -1);
-                    saleEquips.forEach(equip => {this.sell(equip)});
+                    saleEquips.forEach(equip => {this.sale(equip)});
                 }
+            },
+            allSale () {
+                let equips = [].concat(this.player.knapsack);
+                equips.forEach(equip => {
+                    this.sale(equip);
+                })
+            },
+            intelligenceSale () {
+                let equips = this.player.knapsack.filter(equip => this.player.getCurrEquipPower(equip) < this.player.getCombatPower());
+                equips.forEach(equip => {
+                    this.sale(equip);
+                })
             }
         },
         components: {
@@ -144,7 +164,7 @@
                 dl{
                     padding: 0 0.2rem;
                     height: 0.45rem;
-                    font-size: 0.28rem;
+                    font-size: 0.32rem;
                     line-height: 0.45rem;
                     span{
                         float: left;
@@ -163,7 +183,7 @@
                 dl{
                     padding: 0 0.2rem;
                     height: 0.45rem;
-                    font-size: 0.28rem;
+                    font-size: 0.32rem;
                     line-height: 0.45rem;
                     span{
                         float: left;
@@ -176,9 +196,11 @@
                             margin-left: 0.2rem;
                         }
                     }
-                    button{
+                    .btn-group{
                         float: right;
-                        height: 0.4rem;
+                        button{
+                            height: 0.4rem;
+                        }
                     }
                 }
             }
@@ -212,6 +234,9 @@
             }
             .knapsack-bottom{
                 padding: 0.2rem;    
+            }
+            .sale-btn-group{
+                padding: 0.2rem 0;
             }
         }
         .curr-equip{

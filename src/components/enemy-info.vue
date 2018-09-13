@@ -27,7 +27,7 @@
         width: 100%;
         height: calc(25% - 0.1rem);
         margin-bottom: 0.1rem;
-        font-size: 0.24rem;
+        font-size: 0.28rem;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;

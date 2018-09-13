@@ -19,9 +19,7 @@
         position: relative;
         width: 100%;
         height: calc(30% - 0.1rem);
-        font-size: 0.24rem;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
+        font-size: 0.28rem;
         box-sizing: border-box;
         border: 1px solid $black;
         overflow: hidden;
@@ -29,6 +27,8 @@
             position: absolute;
             bottom: 0;
             left: 0;
+            padding-left: 0.1rem;
+            line-height: 0.4rem;
         }
     }
 </style>

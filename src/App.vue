@@ -285,22 +285,27 @@ export default {
             width: 100%;
             height: calc(25% - 0.1rem);
             margin-bottom: 0.1rem;
-            font-size: 0.24rem;
+            font-size: 0.32rem;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
             border: 1px solid $black;
             .button-group-left{
-                width: 70%;
+                width: 60%;
+                button{
+                    margin: 0.06rem;
+                }
             }
             .button-group-right{
-                width: 30%;
+                width: 40%;
             }
         }
     }
     button{
-        padding: 1px 0.06rem;
-        font-size: 0.24rem;
+        height: 0.4rem;
+        box-sizing: border-box;
+        padding: 0 0.06rem;
+        font-size: 0.28rem;
         background-color: $white;
         border: 1px solid $gray;
     }

@@ -3,7 +3,7 @@ import { deepCopy, probRandom } from './util';
 import EquipData from './equipData';
 export default class Equip {
     // constructor ({type = "Weapon", quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = []}) {
-    constructor ({id = "ID1", accordingToId = true, quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = []}) {
+    constructor ({id = "ID1", accordingToId = true, quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = [], lockFlag = false}) {
         if (accordingToId) {
             this.id = id;
             this.lv = lv;
@@ -55,6 +55,7 @@ export default class Equip {
             this.crtDamage = crtDamage;
             this.extraAttr = extraAttr;
         }
+        this.lockFlag = lockFlag;
     }
     createExtraAttr () {
         let equipExtraAttr = deepCopy(EquipExtraAttr);
@@ -76,6 +77,12 @@ export default class Equip {
     }
     getColor () {
         return this.equipQuality.color;
+    }
+    lock () {
+        this.lockFlag = true;
+    }
+    unlock () {
+        this.lockFlag = false;
     }
     // 显示使用
     getBaseInfo () {

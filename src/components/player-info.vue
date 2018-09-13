@@ -32,7 +32,7 @@
         width: 100%;
         margin-bottom: 0.1rem;
         height: calc(20% - 0.1rem);
-        font-size: 0.24rem;
+        font-size: 0.28rem;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;

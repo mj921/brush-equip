@@ -32,7 +32,7 @@
         width: 100%;
         height: 100%;
         background-color: $maskColor;
-        font-size: 0.245rem;
+        font-size: 0.32rem;
         .base-info{
             margin: 0.2rem;
             background-color: $white;
@@ -40,7 +40,7 @@
             box-sizing: border-box;
             padding: 0.2rem;
             dl{
-                line-height: 0.36rem;
+                line-height: 0.45rem;
             }
         }
     }
