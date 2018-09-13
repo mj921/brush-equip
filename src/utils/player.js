@@ -140,6 +140,10 @@ export default class Player extends Character{
         equip.extraAttr.forEach(attr => {
             p[attr.type.code] += attr.value;
         })
+        p.minAtk = Math.floor(p.baseMinAtk * (100 + p.extraAtk) / 100);
+        p.maxAtk = Math.floor(p.baseMaxAtk * (100 + p.extraAtk) / 100);
+        p.def = Math.floor(p.baseDef * (100 + p.extraDef) / 100);
+        p.hp = Math.floor(p.baseHp * (100 + p.extraHp) / 100);
         let cp = p.getCombatPower();
         p = null;
         return cp;
