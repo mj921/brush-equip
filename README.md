@@ -48,3 +48,5 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 4. 自动出售
 
 5. 装备洗炼
+
+6. 消息提示
