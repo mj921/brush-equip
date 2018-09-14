@@ -39,7 +39,6 @@ export default class Player extends Character{
         this.goldCoin += goldCoin;
     }
     pay (goldCoin) {
-        console.log(goldCoin)
         this.goldCoin -= goldCoin;
     }
     levelUp () {
@@ -61,6 +60,7 @@ export default class Player extends Character{
         this.maxAtk = Math.floor(this.baseMaxAtk * (100 + this.extraAtk) / 100);
         this.def = Math.floor(this.baseDef * (100 + this.extraDef) / 100);
         this.hp = Math.floor(this.baseHp * (100 + this.extraHp) / 100);
+        this.interval = Math.floor(this.intervalBase * 100 -  this.speed) / 100;
     }
     equipFn (equip, saveFlag = true) {
         if (this.equips[equip.type]) {

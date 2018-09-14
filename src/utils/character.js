@@ -9,7 +9,7 @@ export default class Character{
         this.def = def;
         this.speed = speed;
         this.intervalBase = 1;
-        this.interval = Math.floor(this.intervalBase * 100 -  this.speed) / 100
+        this.interval = Math.floor(this.intervalBase * 100 -  this.speed) / 100;
         this.hit = hit; // 命中
         this.dodge = dodge; // 闪避
         this.crt = crt; // 暴击
