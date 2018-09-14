@@ -47,21 +47,21 @@ export default {
             msgList: [],
             enemyLv: 1,
             enemyNum: 0,
-            enemyNumMax: 10
+            enemyNumMax: 10,
+            enemyStos: [],
+            playerSto: null
         }
     },
     methods: {
+        clearSto () {
+            clearTimeout(this.playerSto);
+            this.enemyStos.forEach(sto => {
+                clearTimeout(sto);
+            });
+        },
         fight () {
             this.inBattleFlag = true;
             let currEnemyIdx = 0;
-            let enemyStos = [];
-            let playerSto;
-            let clearSto = () => {
-                clearTimeout(playerSto);
-                enemyStos.forEach(sto => {
-                    clearTimeout(sto);
-                });
-            }
             let playerAtkFn = () => {
                 var ch = this.player.attack(this.enemys[currEnemyIdx]);
                 if (ch.msg) {
@@ -70,33 +70,33 @@ export default {
                 if (ch.currHp === 0) {
                     currEnemyIdx++;
                     if (currEnemyIdx < this.enemys.length) {
-                        playerSto = setTimeout(playerAtkFn, this.player.interval * 1000 / this.gameSpeed)
+                        this.playerSto = setTimeout(playerAtkFn, this.player.interval * 1000 / this.gameSpeed)
                     } else {
-                        clearSto();
+                        this.clearSto();
                         this.victory();
                     }
                 } else {
-                    playerSto = setTimeout(playerAtkFn, this.player.interval * 1000 / this.gameSpeed);
+                    this.playerSto = setTimeout(playerAtkFn, this.player.interval * 1000 / this.gameSpeed);
                 }
             }
-            playerSto = setTimeout(playerAtkFn, this.player.interval * 1000 / this.gameSpeed);
+            this.playerSto = setTimeout(playerAtkFn, this.player.interval * 1000 / this.gameSpeed);
             let enemyAtkFn = (i) => {
                 var ch = this.enemys[i].attack(this.player);
                 if (ch.msg) {
                     this.log(ch.msg);
                 }
                 if (ch.currHp === 0) {
-                    clearSto();
+                    this.clearSto();
                     this.loss();
                 } else {
-                    clearTimeout(enemyStos[i]);
-                    enemyStos[i] = setTimeout(() => {
+                    clearTimeout(this.enemyStos[i]);
+                    this.enemyStos[i] = setTimeout(() => {
                         enemyAtkFn(i);
                     }, this.enemys[i].interval * 1000 / this.gameSpeed)
                 }
             }
             this.enemys.forEach((enemy, i) => {
-                enemyStos[i] = setTimeout(() => {
+                this.enemyStos[i] = setTimeout(() => {
                     enemyAtkFn(i);
                 }, enemy.interval * 1000 / this.gameSpeed);
             })
@@ -206,7 +206,11 @@ export default {
         },
         initGame () {
             localStorage.clear();
+            this.clearSto();
+            this.enemyLv = 1;
+            this.enemyNum = 0;
             this.player = new Player();
+            this.createEnemys();
         }
     },
     provide () {
