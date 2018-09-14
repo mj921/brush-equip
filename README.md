@@ -30,3 +30,11 @@ npm test
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 [演示地址](https://mj921.github.io/brush-equip/dist/index.html)
+
+todo
+
+1. 挂机离线收益
+2. 挂机离线升级
+    * 挂机怪物品质
+    * 挂机恢复速度
+    * 最长挂机时间

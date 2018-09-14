@@ -261,7 +261,7 @@ export default {
         }
         this.autoFightFlag = (localStorage.getItem("autoFightFlag") && localStorage.getItem("autoFightFlag") !== "false") || false;
         this.enemyLv = localStorage.getItem("enemyLv") ? +localStorage.getItem("enemyLv") : 1;
-        this.enemyNum = localStorage.getItem("enemyNum") ? +localStorage.getItem("enemyNum") : 1;
+        this.enemyNum = localStorage.getItem("enemyNum") ? +localStorage.getItem("enemyNum") : 0;
         this.createEnemys();
     }
 }
