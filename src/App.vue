@@ -49,7 +49,9 @@ export default {
             enemyNum: 0,
             enemyNumMax: 10,
             enemyStos: [],
-            playerSto: null
+            playerSto: null,
+            onHookEnemyLv: "Puniness",
+            onHookProfitMultipleRate: 1
         }
     },
     methods: {
@@ -116,7 +118,11 @@ export default {
             })
             this.player.getExp(exp);
         },
+        saveTime () {
+            localStorage.setItem("saveTime", new Date().getTime());
+        },
         loss () {
+            this.saveTime();
             this.log("战斗失败");
             if (this.enemyNum > 0) {
                 this.enemyNum--;
@@ -135,6 +141,7 @@ export default {
             });
         },
         victory () {
+            this.saveTime();
             this.log("战斗胜利");
             this.fallDownEquipment();
             this.getExp();
@@ -211,6 +218,24 @@ export default {
             this.enemyNum = 0;
             this.player = new Player();
             this.createEnemys();
+        },
+        calculationOnHookProfit () {
+            let now = new Date().getTime();
+            let later = +localStorage.getItem("saveTime");
+            localStorage.setItem("saveTime", now);
+            let enemy = new Enemy("Slime", this.onHookEnemyLv, this.enemyLv);
+            let damage = this.player.getOnHookDamage(enemy);
+            let enemyDamage = enemy.getOnHookDamage(this.player);
+            let time1 = Math.floor(enemy.hp / damage) * 1000 / this.onHookProfitMultipleRate * this.player.interval;
+            let enemyDamageTotal = Math.floor(time1 / enemy.interval) / 1000 * enemyDamage;
+            let time2 = Math.floor((enemyDamageTotal > this.player.hp ? 100 : enemyDamageTotal / this.player.hp * 100) / this.recoverySpeed * 1000);
+            let num = Math.floor((now - later) / (time1 + time2));
+            let equips = [];
+            for (let i = 0; i < num; i++) {
+                equips.push(enemy.fallDownEquipment());
+            }
+            this.player.getEquips(equips);
+            this.log(`挂机共获得 ${equips.length} 件装备`);
         }
     },
     provide () {
@@ -259,9 +284,10 @@ export default {
             })
             this.player.knapsack = arr;
         }
-        this.autoFightFlag = (localStorage.getItem("autoFightFlag") && localStorage.getItem("autoFightFlag") !== "false") || false;
+        // this.autoFightFlag = (localStorage.getItem("autoFightFlag") && localStorage.getItem("autoFightFlag") !== "false") || false;
         this.enemyLv = localStorage.getItem("enemyLv") ? +localStorage.getItem("enemyLv") : 1;
         this.enemyNum = localStorage.getItem("enemyNum") ? +localStorage.getItem("enemyNum") : 0;
+        this.calculationOnHookProfit();
         this.createEnemys();
     }
 }

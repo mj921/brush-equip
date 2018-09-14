@@ -45,4 +45,8 @@ export default class Character{
     getCombatPower () {
         return Math.floor((this.maxAtk + this.minAtk) / 2 / this.interval * (1 + this.crt * this.crtDamage / 10000) * this.hit / 100 * 10 + this.hp / (1 - this.getDamageRemission()) / (100 - this.dodge) * 5 * 10);
     }
+    getOnHookDamage (enemy) {
+        let damage = Math.floor((this.maxAtk + this.minAtk) / 2 * (1 - enemy.getDamageRemission()) * this.hit / 100 * (100 - enemy.dodge) / 100 * (1 + this.crt * this.crtDamage / 10000));
+        return damage > 1 ? damage :1;
+    }
 }

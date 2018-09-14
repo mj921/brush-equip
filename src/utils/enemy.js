@@ -59,7 +59,6 @@ export default class Enemy extends Character {
         let lv = this.lv - Math.floor(Math.random() * 5);
         lv = lv > 0 ? lv : 1;
         let equip = new Equip({id: this.equips[Math.floor(Math.random() * this.equips.length)], quality: equipQuality, lv });
-        console.log(equip);
         return equip;
     }
 }
