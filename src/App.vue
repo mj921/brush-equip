@@ -196,6 +196,7 @@ export default {
             }
         },
         showKnapsack () {
+            this.isMinStatus();
             this.knapsackVisible = true;
         },
         showPlayerAttr () {
@@ -236,6 +237,16 @@ export default {
             }
             this.player.getEquips(equips);
             this.log(`挂机共获得 ${equips.length} 件装备`);
+        },
+        isMinStatus() {
+            var isMin = false;
+                if (window.outerWidth != undefined) {
+                isMin = window.outerWidth <= 160 && window.outerHeight <= 27;
+            }
+            else {
+                isMin = window.screenTop < -30000 && window.screenLeft < -30000;
+            }
+            return isMin;
         }
     },
     provide () {

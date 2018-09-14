@@ -40,5 +40,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
     * 挂机怪物品质
 
     * 挂机恢复速度
-    
+
     * 最长挂机时间
+
+3. 一键装备战斗力最高的装备
