@@ -11,7 +11,7 @@
                 </dl>
             </div>
             <div class="not-equip">
-                <dl v-for="(equip, i) in player.knapsack" :key="i" :data-aaa="player.getCurrEquipPower(equip) + ',' + player.getCombatPower()">
+                <dl v-for="(equip, i) in player.knapsack" :key="i">
                     <span :style="'color:' + equip.getColor()" @click="showEquipDetail(equip, 'equip')">{{equip.getName()}} (lv: {{equip.lv}})</span>
                     <span class="red-text" v-if="player.getCurrEquipPower(equip) > player.getCombatPower()">+{{player.getCurrEquipPower(equip) - player.getCombatPower()}}</span>
                     <span class="green-text" v-else>{{player.getCurrEquipPower(equip) - player.getCombatPower()}}</span>
@@ -33,7 +33,12 @@
             </div>
             <div class="equip-info" v-show="detailVisible" @click="closeDetail">
                 <be-equip-detail class="curr-equip" v-if="!!currEquip" :equip="currEquip" btnType="unload" @unload="unloadEquip(equip.type)"></be-equip-detail>
-                <be-equip-detail :equip="equip" :btnType="btnType" @equip="equipFn(equip)" @unload="unloadEquip(equip.type)"></be-equip-detail>
+                <be-equip-detail
+                    :equip="equip"
+                    :btnType="btnType"
+                    :powerUp="powerUp"
+                    @equip="equipFn(equip)"
+                    @unload="unloadEquip(equip.type)"></be-equip-detail>
             </div>
             <div class="equip-info" v-show="multSaleVisible" @click="closeMultSale">
                 <div class="mult-sale-container" @click="stopProp($event)">
@@ -65,6 +70,7 @@
                 equip: null,
                 btnType: 'equip',
                 currEquip: null,
+                powerUp: "",
                 multSaleVisible: false,
                 equipQualityList: Object.values(deepCopy(EquipQuality)).map(item => {
                     return Object.assign(item, {value: false})
@@ -82,8 +88,11 @@
             showEquipDetail (equip, btnType) {
                 if (btnType === "equip") {
                     this.currEquip = this.player.equips[equip.type];
+                    let powerUp = this.player.getCurrEquipPower(equip) - this.player.getCombatPower();
+                    this.powerUp = powerUp > 0 ? "+" + powerUp : "" + powerUp;
                 } else {
                     this.currEquip = null;
+                    this.powerUp = "";
                 }
                 this.detailVisible = true;
                 this.equip = equip;

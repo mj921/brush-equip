@@ -7,10 +7,13 @@ export default class Enemy extends Character {
     constructor (type = "Slime", suffix = "Normal", lv = 1) {
         let characterData = deepCopy(EnemyData[type]);
         let suffixObj = Suffix[suffix];
+        let enLv = lv - 1 + suffixObj.addLv;
+        enLv = enLv > 0 ? enLv : 0;
         if (characterData) {
-            characterData.hp = characterData.hp + characterData.hpI * (lv - 1 + suffixObj.addLv);
-            characterData.atk = characterData.atk + characterData.atkI * (lv - 1 + suffixObj.addLv);
-            characterData.def = characterData.def + characterData.defI * (lv - 1 + suffixObj.addLv);
+            characterData.hp = characterData.hp + characterData.hpI * enLv;
+            characterData.minAtk = characterData.minAtk + characterData.minAtkI * enLv;
+            characterData.maxAtk = characterData.maxAtk + characterData.maxAtkI * enLv;
+            characterData.def = characterData.def + characterData.defI * enLv;
             characterData.lv = lv;
         } else {
             characterData = {
@@ -31,7 +34,7 @@ export default class Enemy extends Character {
             }
         }
         super(characterData);
-        this.exp = characterData.exp + characterData.expI * (lv - 1 + suffixObj.addLv);
+        this.exp = characterData.exp + characterData.expI * enLv;
         this.exp = this.exp > 0 ? this.exp : 1;
         this.name = `[${suffixObj.name}]${characterData.name}`;
         this.enemyType = type;

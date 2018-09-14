@@ -1,17 +1,19 @@
 import Character from './character';
 import { deepCopy } from './util';
+import { PlayLvUpAttr } from './data';
 export default class Player extends Character{
-    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 50, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0} = {}) {
+    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 50, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, extraAtk = 0, extraHp = 0, extraDef = 0} = {}) {
         super({hp, lv, minAtk, maxAtk, def, speed, hit, dodge, crt, crtDamage});
         this.maxExp = maxExp;
         this.currExp = currExp;
-        this.extraAtk = 0;
-        this.extraDef = 0;
-        this.extraHp = 0;
-        this.baseMinAtk = this.minAtk;
-        this.baseMaxAtk = this.maxAtk;
-        this.baseDef = this.def;
-        this.baseHp = this.hp;
+        this.extraAtk = extraAtk;
+        this.extraDef = extraDef;
+        this.extraHp = extraHp;
+        this.baseMinAtk = baseMinAtk;
+        this.baseMaxAtk = baseMaxAtk;
+        this.baseDef = baseDef;
+        this.baseHp = baseHp;
+        this.calculationBaseAttr();
         this.goldCoin = goldCoin;
         this.knapsack = [];
         this.equips = {
@@ -37,11 +39,21 @@ export default class Player extends Character{
         this.lv++;
         this.currExp -= this.maxExp;
         this.maxExp = this.lv * this.lv * 100;
+        Object.keys(PlayLvUpAttr).forEach(key => {
+            this[key] += PlayLvUpAttr[key];
+        })
+        this.calculationBaseAttr();
         this.save();
     }
     getEquips (equips) {
         this.knapsack = this.knapsack.concat(equips);
         this.save();
+    }
+    calculationBaseAttr () {
+        this.minAtk = Math.floor(this.baseMinAtk * (100 + this.extraAtk) / 100);
+        this.maxAtk = Math.floor(this.baseMaxAtk * (100 + this.extraAtk) / 100);
+        this.def = Math.floor(this.baseDef * (100 + this.extraDef) / 100);
+        this.hp = Math.floor(this.baseHp * (100 + this.extraHp) / 100);
     }
     equipFn (equip, saveFlag = true) {
         if (this.equips[equip.type]) {
@@ -62,10 +74,7 @@ export default class Player extends Character{
         equip.extraAttr.forEach(attr => {
             this[attr.type.code] += attr.value;
         })
-        this.minAtk = Math.floor(this.baseMinAtk * (100 + this.extraAtk) / 100);
-        this.maxAtk = Math.floor(this.baseMaxAtk * (100 + this.extraAtk) / 100);
-        this.def = Math.floor(this.baseDef * (100 + this.extraDef) / 100);
-        this.hp = Math.floor(this.baseHp * (100 + this.extraHp) / 100);
+        this.calculationBaseAttr();
         if (this.currHp > this.hp) {
             this.currHp = this.hp;
         }
@@ -85,10 +94,7 @@ export default class Player extends Character{
             })
             this.equips[equipType] = null;
         }
-        this.minAtk = Math.floor(this.baseMinAtk * (100 + this.extraAtk) / 100);
-        this.maxAtk = Math.floor(this.baseMaxAtk * (100 + this.extraAtk) / 100);
-        this.def = Math.floor(this.baseDef * (100 + this.extraDef) / 100);
-        this.hp = Math.floor(this.baseHp * (100 + this.extraHp) / 100);
+        this.calculationBaseAttr();
         if (this.currHp > this.hp) {
             this.currHp = this.hp;
         }
@@ -140,10 +146,7 @@ export default class Player extends Character{
         equip.extraAttr.forEach(attr => {
             p[attr.type.code] += attr.value;
         })
-        p.minAtk = Math.floor(p.baseMinAtk * (100 + p.extraAtk) / 100);
-        p.maxAtk = Math.floor(p.baseMaxAtk * (100 + p.extraAtk) / 100);
-        p.def = Math.floor(p.baseDef * (100 + p.extraDef) / 100);
-        p.hp = Math.floor(p.baseHp * (100 + p.extraHp) / 100);
+        p.calculationBaseAttr();
         let cp = p.getCombatPower();
         p = null;
         return cp;

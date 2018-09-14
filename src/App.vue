@@ -259,6 +259,7 @@ export default {
         this.enemyLv = localStorage.getItem("enemyLv") ? +localStorage.getItem("enemyLv") : 1;
         this.enemyNum = localStorage.getItem("enemyNum") ? +localStorage.getItem("enemyNum") : 1;
         this.createEnemys();
+        console.log(new Enemy("Slime", "Normal", 4))
     }
 }
 </script>
@@ -293,6 +294,10 @@ export default {
             .button-group-left{
                 width: 60%;
                 button{
+                    width: 1.3rem;
+                    height: 0.4rem;
+                    line-height: 0.4rem;
+                    text-align: center;
                     margin: 0.06rem;
                 }
             }

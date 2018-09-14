@@ -13,9 +13,10 @@ const enemyData = {
         crt: 10,
         crtDamage: 200,
         exp: 1,
-        hpI: 100,
-        atkI: 10,
-        defI: 20,
+        hpI: 80,
+        minAtkI: 4,
+        maxAtkI: 5,
+        defI: 16,
         expI: 1,
         equips: ["ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9"]
     }

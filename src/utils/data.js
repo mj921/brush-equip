@@ -144,6 +144,10 @@ export const EquipAttributeType = {
     MaxAtk: {name: "最大攻击", suffix: "", code: "maxAtk"},
     Hp: {name: "生命", suffix: "", code: "hp"},
     Def: {name: "防御", suffix: "", code: "def"},
+    BaseMinAtk: {name: "基础最小攻击", suffix: "", code: "baseMinAtk"},
+    BaseMaxAtk: {name: "基础最大攻击", suffix: "", code: "baseMaxAtk"},
+    BaseHp: {name: "基础生命", suffix: "", code: "baseHp"},
+    BaseDef: {name: "基础防御", suffix: "", code: "baseDef"},
     Speed: {name: "攻击速度", suffix: "%", code: "speed"},
     Hit: {name: "命中", suffix: "%", code: "hit"},
     Dodge: {name: "闪避", suffix: "%", code: "dodge"},
@@ -188,3 +192,9 @@ export const EquipExtraAttr = [
         value: [1, 5]
     }
 ]
+export const PlayLvUpAttr = {
+    [EquipAttributeType.BaseMaxAtk.code]: 5,
+    [EquipAttributeType.BaseMinAtk.code]: 1,
+    [EquipAttributeType.BaseHp.code]: 50,
+    [EquipAttributeType.BaseDef.code]: 3
+}

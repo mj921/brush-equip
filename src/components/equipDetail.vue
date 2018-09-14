@@ -1,7 +1,13 @@
 <template>
     <div class="equip-detail">
         <div class="base-info" v-if="equip">
-            <dl :style="'color: ' + equip.getColor()">{{equip.getName()}} (lv: {{equip.lv}})</dl>
+            <dl>
+                <span :style="'color: ' + equip.getColor()">{{equip.getName()}} (lv: {{equip.lv}})</span>
+                <template v-if="powerUp">
+                    <span class="red-text" v-if="+powerUp > 0">{{powerUp}}</span>
+                    <span class="green-text" v-else>{{powerUp}}</span>
+                </template>
+            </dl>
             <dl v-for="(attr, i) in equip.getBaseInfo()" :key="i">{{attr.name}}：{{attr.value}} <span class="round">({{attr.round.join(" - ")}})</span></dl>
         </div>
         <div class="extra-info" v-if="equip && equip.extraAttr && equip.extraAttr.length > 0">
@@ -18,7 +24,8 @@
             btnType: {
                 type: String,
                 default: "equip"
-            }
+            },
+            powerUp: String
         },
         methods: {
             equipFn (e) {
@@ -44,6 +51,14 @@
             line-height: 0.36rem;
             .round{
                 color: $gray;
+            }
+            .red-text{
+                color: $red;
+                margin-left: 0.2rem;
+            }
+            .green-text{
+                color: $green;
+                margin-left: 0.2rem;
             }
         }
         .base-info{
