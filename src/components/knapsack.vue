@@ -7,7 +7,7 @@
                         <span :style="'color:' + player.equips[key].getColor()" @click="showEquipDetail(player.equips[key], 'unload')">{{player.equips[key].getName()}} (lv: {{player.equips[key].lv}})</span>
                         <button @click="unloadEquip(key)">卸下</button>
                     </template>
-                    <span v-else>未装备</span>
+                    <span v-else>未装备{{EquipType[key].name}}</span>
                 </dl>
             </div>
             <div class="not-equip">
@@ -69,7 +69,7 @@
 
 <script>
     import BeEquipDetail from './equipDetail.vue';
-    import { EquipQuality } from '@/utils/data';
+    import { EquipQuality, EquipType } from '@/utils/data';
     import { deepCopy } from '@/utils/util';
     export default {
         data () {
@@ -82,7 +82,8 @@
                 multSaleVisible: false,
                 equipQualityList: Object.values(deepCopy(EquipQuality)).map(item => {
                     return Object.assign(item, {value: false})
-                })
+                }),
+                EquipType
             }
         },
         props: {
@@ -162,8 +163,10 @@
                     this.player.pay(strengthenPrice);
                     if (equip.strengthen()) {
                         this.log("强化成功");
+                        this.$message({message: "强化成功"});
                     } else {
                         this.log("强化失败");
+                        this.$message({message: "强化失败"});
                     }
                 }
             }

@@ -3,9 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import ElementUI from 'element-ui'
+import message from '@/utils/message';
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI)
+message(Vue);
 
 /* eslint-disable no-new */
 new Vue({
