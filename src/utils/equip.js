@@ -1,4 +1,4 @@
-import { EquipType, EquipQuality, EquipExtraAttr } from './data';
+import { EquipType, EquipQuality, EquipExtraAttr, EquipPrice } from './data';
 import { deepCopy, probRandom } from './util';
 import EquipData from './equipData';
 export default class Equip {
@@ -56,6 +56,7 @@ export default class Equip {
             this.extraAttr = extraAttr;
         }
         this.lockFlag = lockFlag;
+        this.price = (EquipPrice.Base + EquipPrice.LevelIncrease * (this.lv - 1)) * this.equipQuality.attrAddition;
     }
     createExtraAttr () {
         let equipExtraAttr = deepCopy(EquipExtraAttr);

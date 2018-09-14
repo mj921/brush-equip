@@ -115,6 +115,7 @@
             sale (equip) {
                 if (!equip.lockFlag) {
                     this.player.saleEquip(equip);
+                    this.player.getGoldCoin(equip.price);
                 }
             },
             closeMultSale () {

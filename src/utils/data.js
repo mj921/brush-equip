@@ -198,3 +198,8 @@ export const PlayLvUpAttr = {
     [EquipAttributeType.BaseHp.code]: 50,
     [EquipAttributeType.BaseDef.code]: 3
 }
+
+export const EquipPrice = {
+    Base: 10,
+    LevelIncrease: 10
+}

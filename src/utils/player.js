@@ -35,6 +35,9 @@ export default class Player extends Character{
         }
         this.save();
     }
+    getGoldCoin (goldCoin) {
+        this.goldCoin += goldCoin;
+    }
     levelUp () {
         this.lv++;
         this.currExp -= this.maxExp;
