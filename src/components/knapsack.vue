@@ -19,7 +19,7 @@
                         <button @click="equipFn(equip)">装备</button>
                         <button @click="equip.unlock()" v-if="equip.lockFlag">解锁</button>
                         <button @click="equip.lock()" v-else>锁上</button>
-                        <button @click="sale(equip)">出售</button>
+                        <button @click="sale(equip)" v-show="!equip.lockFlag">出售</button>
                     </div>
                 </dl>
             </div>
@@ -32,13 +32,21 @@
                 </div>
             </div>
             <div class="equip-info" v-show="detailVisible" @click="closeDetail">
-                <be-equip-detail class="curr-equip" v-if="!!currEquip" :equip="currEquip" btnType="unload" @unload="unloadEquip(equip.type)"></be-equip-detail>
+                <be-equip-detail
+                    v-if="!!currEquip"
+                    class="curr-equip"
+                    btnType="unload"
+                    :equip="currEquip"
+                    @unload="unloadEquip(equip.type)"
+                    @strengthen="strengthen"></be-equip-detail>
                 <be-equip-detail
                     :equip="equip"
                     :btnType="btnType"
                     :powerUp="powerUp"
                     @equip="equipFn(equip)"
-                    @unload="unloadEquip(equip.type)"></be-equip-detail>
+                    @unload="unloadEquip(equip.type)"
+                    @strengthen="strengthen"
+                    @sale="sale"></be-equip-detail>
             </div>
             <div class="equip-info" v-show="multSaleVisible" @click="closeMultSale">
                 <div class="mult-sale-container" @click="stopProp($event)">
@@ -84,6 +92,7 @@
                 default: false
             }
         },
+        inject: ["log"],
         methods: {
             showEquipDetail (equip, btnType) {
                 if (btnType === "equip") {
@@ -113,6 +122,7 @@
                 this.detailVisible = false;
             },
             sale (equip) {
+                this.detailVisible = false;
                 if (!equip.lockFlag) {
                     this.player.saleEquip(equip);
                     this.player.getGoldCoin(equip.price);
@@ -145,6 +155,17 @@
                 equips.forEach(equip => {
                     this.sale(equip);
                 })
+            },
+            strengthen (equip) {
+                let strengthenPrice = equip.getStrengthenPrice();
+                if (strengthenPrice <= this.player.goldCoin) {
+                    this.player.pay(strengthenPrice);
+                    if (equip.strengthen()) {
+                        this.log("强化成功");
+                    } else {
+                        this.log("强化失败");
+                    }
+                }
             }
         },
         components: {

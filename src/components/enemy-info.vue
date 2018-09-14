@@ -1,7 +1,8 @@
 <template>
     <div class="enemy-info">
         <dl v-for="(enemy, i) in enemys" :key="i">
-            <label :style="'color:' + enemy.color">{{enemy.name}}：</label><be-hp-bar :curr="enemy.currHp" :max="enemy.hp"></be-hp-bar>
+            <label :style="'color:' + enemy.color">{{enemy.name}}：</label>
+            <be-hp-bar :curr="enemy.currHp" :max="enemy.hp"></be-hp-bar>
         </dl>
     </div>
 </template>
@@ -14,9 +15,6 @@
         },
         components: {
             BeHpBar
-        },
-        created () {
-            console.log(this.enemys);
         }
     }
 </script>

@@ -263,7 +263,6 @@ export default {
         this.enemyLv = localStorage.getItem("enemyLv") ? +localStorage.getItem("enemyLv") : 1;
         this.enemyNum = localStorage.getItem("enemyNum") ? +localStorage.getItem("enemyNum") : 1;
         this.createEnemys();
-        console.log(new Enemy("Slime", "Normal", 4))
     }
 }
 </script>
