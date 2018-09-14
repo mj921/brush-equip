@@ -31,7 +31,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 [演示地址](https://mj921.github.io/brush-equip/dist/index.html)
 
-todo
+## todo
 
 1. 挂机离线收益
 2. 挂机离线升级
