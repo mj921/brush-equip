@@ -44,3 +44,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
     * 最长挂机时间
 
 3. 一键装备战斗力最高的装备
+
+4. 自动出售
+
+5. 装备洗炼
