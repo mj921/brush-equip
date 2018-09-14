@@ -34,7 +34,11 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 ## todo
 
 ~~1. 挂机离线收益~~
+
 2. 挂机离线升级
+
     * 挂机怪物品质
+
     * 挂机恢复速度
+    
     * 最长挂机时间
