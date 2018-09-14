@@ -33,7 +33,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 ## todo
 
-~~1. 挂机离线收益~~
+1. ~~挂机离线收益~~
 
 2. 挂机离线升级
 
@@ -49,6 +49,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 5. 装备洗炼
 
-~~6. 消息提示~~
+6. ~~消息提示~~
 
-~~7. 装备栏显示装备类型~~
+7. ~~装备栏显示装备类型~~
