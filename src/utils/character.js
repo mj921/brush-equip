@@ -16,13 +16,17 @@ export default class Character{
         this.crtDamage = crtDamage;
     }
     // 伤害减免
-    getDamageRemission () {
+    getDamageRemission (enemy) {
+        return this.def / (this.def + enemy.lv * 100);
+    }
+    // 伤害减免 (用于计算战斗力)
+    getDamageRemissionByCombatPower () {
         return this.def / (this.def + this.lv * 100);
     }
     attack (enemy) {
         let obj = {};
         if (Math.random() * 100 < this.hit && Math.random() * 100 >= enemy.dodge) {
-            let damage = (Math.random() * (this.maxAtk - this.minAtk) + this.minAtk) * (1 - enemy.getDamageRemission());
+            let damage = (Math.random() * (this.maxAtk - this.minAtk) + this.minAtk) * (1 - enemy.getDamageRemission(enemy));
             let crtFlag = false;
             if (Math.random() * 100 < this.crt) {
                 damage *= (this.crtDamage / 100);
@@ -46,7 +50,7 @@ export default class Character{
         return Math.floor((this.maxAtk + this.minAtk) / 2 / this.interval * (1 + this.crt * this.crtDamage / 10000) * this.hit / 100 * 10 + this.hp / (1 - this.getDamageRemission()) / (100 - this.dodge) * 5 * 10);
     }
     getOnHookDamage (enemy) {
-        let damage = Math.floor((this.maxAtk + this.minAtk) / 2 * (1 - enemy.getDamageRemission()) * this.hit / 100 * (100 - enemy.dodge) / 100 * (1 + this.crt * this.crtDamage / 10000));
+        let damage = Math.floor((this.maxAtk + this.minAtk) / 2 * (1 - enemy.getDamageRemissionByCombatPower()) * this.hit / 100 * (100 - enemy.dodge) / 100 * (1 + this.crt * this.crtDamage / 10000));
         return damage > 1 ? damage :1;
     }
 }
