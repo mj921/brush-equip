@@ -30,7 +30,7 @@ import BeFightInfo from '@/components/fight-info.vue';
 import BeKnapsack from '@/components/knapsack.vue';
 import BePlayerAttr from '@/components/playerAttr.vue';
 import { ProbabilityEnemyNum, NormalProbabilityEnemySuffix, ProbabilityArr } from '@/utils/data';
-import { deepCopy } from '@/utils/util';
+import { deepCopy, millisecondFmt } from '@/utils/util';
 export default {
     name: 'App',
     data () {
@@ -227,8 +227,8 @@ export default {
             let enemy = new Enemy("Slime", this.onHookEnemyLv, this.enemyLv);
             let damage = this.player.getOnHookDamage(enemy);
             let enemyDamage = enemy.getOnHookDamage(this.player);
-            let time1 = Math.floor(enemy.hp / damage) * 5000 / this.onHookProfitMultipleRate * this.player.interval;
-            let enemyDamageTotal = Math.floor(time1 / enemy.interval) / 5000 * enemyDamage;
+            let time1 = Math.floor(enemy.hp / damage) * 2000 / this.onHookProfitMultipleRate * this.player.interval;
+            let enemyDamageTotal = Math.floor(time1 / enemy.interval) / 2000 * enemyDamage;
             let time2 = Math.floor((enemyDamageTotal > this.player.hp ? 100 : enemyDamageTotal / this.player.hp * 100) / this.recoverySpeed * 1000);
             let num = Math.floor((now - later) / (time1 + time2));
             let equips = [];
@@ -239,7 +239,7 @@ export default {
             }
             this.player.getEquips(equips);
             this.player.getExp(exp);
-            this.log(`挂机共获得 ${equips.length} 件装备, 经验 ${exp}`);
+            this.log(`挂机 ${millisecondFmt(now - later)}, 共获得 ${equips.length} 件装备, 经验 ${exp}`);
         },
         isMinStatus() {
             var isMin = false;

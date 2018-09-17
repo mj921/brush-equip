@@ -26,6 +26,7 @@
             <div class="knapsack-bottom clearfix">
                 <div class="fl">
                     <button @click="showMultSale">批量出售</button>
+                    <button @click="autoEquip">一键装备</button>
                 </div>
                 <div class="fr">
                     <button @click="close">关闭</button>
@@ -169,6 +170,9 @@
                         this.$message({message: "强化失败"});
                     }
                 }
+            },
+            autoEquip () {
+                this.player.autoEquip();
             }
         },
         components: {

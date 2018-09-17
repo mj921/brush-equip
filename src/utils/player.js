@@ -2,7 +2,7 @@ import Character from './character';
 import { deepCopy } from './util';
 import { PlayLvUpAttr } from './data';
 export default class Player extends Character{
-    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 50, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, extraAtk = 0, extraHp = 0, extraDef = 0, knapsackCapacity = 100} = {}) {
+    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 70, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, extraAtk = 0, extraHp = 0, extraDef = 0, knapsackCapacity = 100} = {}) {
         super({hp, lv, minAtk, maxAtk, def, speed, hit, dodge, crt, crtDamage});
         this.maxExp = maxExp;
         this.currExp = currExp;
@@ -20,13 +20,13 @@ export default class Player extends Character{
         this.equips = {
             Weapon: null,
             Helmet: null,
-            Clothes: null,
-            Belt: null,
-            Glove: null,
-            Shoes: null,
             Necklace: null,
+            Clothes: null,
+            Glove: null,
             Ring: null,
-            Trousers: null
+            Belt: null,
+            Trousers: null,
+            Shoes: null
         }
         this.messageHandles = [];
     }
@@ -57,12 +57,12 @@ export default class Player extends Character{
     getEquips (equips) {
         let knapsack = this.knapsack.concat(equips);
         this.knapsack = knapsack.slice(0, this.knapsackCapacity);
-        let goldCoin = 0;
-        knapsack.slice(this.knapsackCapacity, knapsack.length).forEach(equip => {
-            goldCoin += equip.price;
-        })
-        this.getGoldCoin(goldCoin);
-        if (goldCoin > 0) {
+        if (knapsack.length > this.knapsackCapacity) {
+            let goldCoin = 0;
+            knapsack.slice(this.knapsackCapacity, knapsack.length).forEach(equip => {
+                goldCoin += equip.price;
+            })
+            this.getGoldCoin(goldCoin);
             this.sendMsg(`出售 ${knapsack.length - this.knapsackCapacity} 件装备, 共获得 ${goldCoin} 金币`);
         }
         this.save();
@@ -122,6 +122,36 @@ export default class Player extends Character{
     saleEquip (equip) {
         this.knapsack.splice(this.knapsack.indexOf(equip), 1);
         this.save();
+    }
+    autoEquip () {
+        let knapsack = [].concat(this.knapsack);
+        knapsack = knapsack.filter(equip => {
+            return this.getCurrEquipPower(equip) > this.getCombatPower();
+        })
+        knapsack.sort((a, b) => {
+            return this.getCurrEquipPower(b) - this.getCurrEquipPower(a);
+        })
+        let equips = {
+            Weapon: null,
+            Helmet: null,
+            Necklace: null,
+            Clothes: null,
+            Glove: null,
+            Ring: null,
+            Belt: null,
+            Trousers: null,
+            Shoes: null
+        }
+        knapsack.forEach(equip => {
+            if (!equips[equip.type]) {
+                equips[equip.type] = equip;
+            }
+        })
+        Object.keys(equips).forEach(key => {
+            if (equips[key]) {
+                this.equipFn(equips[key]);
+            }
+        })
     }
     save () {
         let player = deepCopy(this);

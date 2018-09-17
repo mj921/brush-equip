@@ -1,5 +1,5 @@
 export default class Character{
-    constructor ({name = "你", hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 0, hit = 50, dodge = 0, crt = 0, crtDamage = 150} = {}) {
+    constructor ({name = "你", hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 0, hit = 70, dodge = 0, crt = 0, crtDamage = 150} = {}) {
         this.name = name;
         this.hp = hp;
         this.currHp = hp;
@@ -26,11 +26,14 @@ export default class Character{
     attack (enemy) {
         let obj = {};
         if (Math.random() * 100 < this.hit && Math.random() * 100 >= enemy.dodge) {
-            let damage = (Math.random() * (this.maxAtk - this.minAtk) + this.minAtk) * (1 - enemy.getDamageRemission(enemy));
+            let damage = (Math.random() * (this.maxAtk - this.minAtk) + this.minAtk) * (1 - enemy.getDamageRemission(this));
             let crtFlag = false;
             if (Math.random() * 100 < this.crt) {
                 damage *= (this.crtDamage / 100);
                 crtFlag = true;
+            }
+            if (this.hit > 100 && Math.random() * 100 < (this.hit - 100)) {
+                damage *= 2;
             }
             damage = damage > 1 ? Math.floor(damage) : 1;
             if (enemy.currHp > damage) {
@@ -47,10 +50,10 @@ export default class Character{
         return `hp: ${this.hp}, lv: ${this.lv}`;
     }
     getCombatPower () {
-        return Math.floor((this.maxAtk + this.minAtk) / 2 / this.interval * (1 + this.crt * this.crtDamage / 10000) * this.hit / 100 * 10 + this.hp / (1 - this.getDamageRemission()) / (100 - this.dodge) * 5 * 10);
+        return Math.floor((this.maxAtk + this.minAtk) / 2 / this.interval * this.crt * this.crtDamage / 10000 * this.hit / 100 * 10 + this.hp / (1 - this.getDamageRemissionByCombatPower()) / (100 - this.dodge) * 5 * 10);
     }
     getOnHookDamage (enemy) {
-        let damage = Math.floor((this.maxAtk + this.minAtk) / 2 * (1 - enemy.getDamageRemissionByCombatPower()) * this.hit / 100 * (100 - enemy.dodge) / 100 * (1 + this.crt * this.crtDamage / 10000));
+        let damage = Math.floor((this.maxAtk + this.minAtk) / 2 * (1 - enemy.getDamageRemission(this)) * this.hit / 100 * (100 - enemy.dodge) / 100 * (1 + this.crt * this.crtDamage / 10000));
         return damage > 1 ? damage :1;
     }
 }
