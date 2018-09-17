@@ -3,7 +3,7 @@ import { deepCopy, probRandom } from './util';
 import EquipData from './equipData';
 export default class Equip {
     // constructor ({type = "Weapon", quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = []}) {
-    constructor ({id = "ID1", accordingToId = true, quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = [], lockFlag = false, strengthenLv = 0}) {
+    constructor ({id = "ID1", accordingToId = true, quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = [], lockFlag = false, strengthenLv = 0, equipData = {}}) {
         if (accordingToId) {
             this.id = id;
             this.lv = lv;
@@ -38,7 +38,7 @@ export default class Equip {
             this.createExtraAttr();
         } else {
             this.id = id;
-            this.equipData = EquipData[id];
+            this.equipData = deepCopy(equipData);
             this.type = this.equipData.type.code;
             this.equipType = this.equipData.type;
             this.quality = quality;
