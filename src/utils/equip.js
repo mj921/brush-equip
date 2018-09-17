@@ -25,15 +25,7 @@ export default class Equip {
             })
             this.type = this.equipData.type.code;
             this.equipType = this.equipData.type;
-            this.minAtk = this.equipData.minAtk ? probRandom(this.equipData.minAtk) : 0;
-            this.maxAtk = this.equipData.maxAtk ? probRandom(this.equipData.maxAtk) : 0;
-            this.hp = this.equipData.hp ? probRandom(this.equipData.hp) : 0;
-            this.def = this.equipData.def ? probRandom(this.equipData.def) : 0;
-            this.speed = this.equipData.speed ? probRandom(this.equipData.speed) : 0;
-            this.hit = this.equipData.hit ? probRandom(this.equipData.hit) : 0;
-            this.dodge = this.equipData.dodge ? probRandom(this.equipData.dodge) : 0;
-            this.crt = this.equipData.crt ? probRandom(this.equipData.crt) : 0;
-            this.crtDamage = this.equipData.crtDamage ? probRandom(this.equipData.crtDamage) : 0;
+            this.createBaseAttr();
             this.extraAttr = [];
             this.createExtraAttr();
         } else {
@@ -74,6 +66,17 @@ export default class Equip {
             additionalAttrNum--;
         }
     }
+    createBaseAttr () {
+        this.minAtk = this.equipData.minAtk ? probRandom(this.equipData.minAtk) : 0;
+        this.maxAtk = this.equipData.maxAtk ? probRandom(this.equipData.maxAtk) : 0;
+        this.hp = this.equipData.hp ? probRandom(this.equipData.hp) : 0;
+        this.def = this.equipData.def ? probRandom(this.equipData.def) : 0;
+        this.speed = this.equipData.speed ? probRandom(this.equipData.speed) : 0;
+        this.hit = this.equipData.hit ? probRandom(this.equipData.hit) : 0;
+        this.dodge = this.equipData.dodge ? probRandom(this.equipData.dodge) : 0;
+        this.crt = this.equipData.crt ? probRandom(this.equipData.crt) : 0;
+        this.crtDamage = this.equipData.crtDamage ? probRandom(this.equipData.crtDamage) : 0;
+    }
     getName () {
         return this.equipQuality.name + "的" + this.equipType.name;
     }
@@ -86,8 +89,15 @@ export default class Equip {
     unlock () {
         this.lockFlag = false;
     }
+    getBurnishPrice () {
+        return Math.floor(this.lv * 100 * this.equipQuality.attrAddition);
+    }
+    // 打磨
+    burnish () {
+        this.createBaseAttr();
+    }
     getStrengthenPrice () {
-        return Math.floor(this.lv * 100 * (this.strengthenLv + 1) * (this.strengthenLv + 1) * (1 + this.equipQuality.attrAddition))
+        return Math.floor(this.lv * 100 * (this.strengthenLv + 1) * (this.strengthenLv + 1) * this.equipQuality.attrAddition);
     }
     strengthen () {
         let success = Math.random() < (25 / (this.strengthenLv + 1) / (this.strengthenLv + 1));

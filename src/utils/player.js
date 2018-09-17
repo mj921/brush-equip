@@ -29,7 +29,6 @@ export default class Player extends Character{
             Shoes: null
         }
         this.messageHandles = [];
-        console.log(11);
         this.equipFallDownNum = localStorage.getItem("equipFallDownNum") ?
             JSON.parse(localStorage.getItem("equipFallDownNum")) :
             (() => {
@@ -40,7 +39,6 @@ export default class Player extends Character{
                 return obj
             })();
 
-        console.log(22);
         this.totalGoldCoin = +localStorage.getItem("totalGoldCoin") || 0;
     }
     getExp (exp) {

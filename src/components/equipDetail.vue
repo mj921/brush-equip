@@ -21,6 +21,7 @@
             <dl v-for="(attr, i) in equip.extraAttr" :key="i">{{attr.type.name}}：{{attr.value + attr.type.suffix}}</dl>
         </div>
         <button @click="strengthen($event)">强化</button>
+        <button @click="burnish($event)">打磨</button>
         <button @click="equipFn($event)" v-show="btnType === 'equip'">装备</button>
         <button @click="unloadEquip($event)" v-show="btnType === 'unload'">卸下</button>
         <button @click="sale($event)" v-show="equip && btnType === 'equip' && !equip.lockFlag">出售</button>
@@ -48,6 +49,10 @@
             strengthen (e) {
                 e.stopPropagation();
                 this.$emit("strengthen", this.equip);
+            },
+            burnish (e) {
+                e.stopPropagation();
+                this.$emit("burnish", this.equip);
             },
             sale (e) {
                 e.stopPropagation();

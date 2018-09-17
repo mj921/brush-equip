@@ -39,7 +39,8 @@
                     btnType="unload"
                     :equip="currEquip"
                     @unload="unloadEquip(equip.type)"
-                    @strengthen="strengthen"></be-equip-detail>
+                    @strengthen="strengthen"
+                    @burnish="burnish"></be-equip-detail>
                 <be-equip-detail
                     :equip="equip"
                     :btnType="btnType"
@@ -47,6 +48,7 @@
                     @equip="equipFn(equip)"
                     @unload="unloadEquip(equip.type)"
                     @strengthen="strengthen"
+                    @burnish="burnish"
                     @sale="sale"></be-equip-detail>
             </div>
             <div class="equip-info" v-show="multSaleVisible" @click="closeMultSale">
@@ -165,6 +167,7 @@
                 let strengthenPrice = equip.getStrengthenPrice();
                 if (strengthenPrice <= this.player.goldCoin) {
                     this.player.pay(strengthenPrice);
+                    this.unloadEquip(equip.type);
                     if (equip.strengthen()) {
                         this.log("强化成功");
                         this.$message({message: "强化成功"});
@@ -172,6 +175,24 @@
                         this.log("强化失败");
                         this.$message({message: "强化失败"});
                     }
+                    this.equipFn(equip);
+                } else {
+                    this.log("金币不足");
+                    this.$message({message: "金币不足"});
+                }
+            },
+            burnish (equip) {
+                let burnishPrice = equip.getStrengthenPrice();
+                if (burnishPrice <= this.player.goldCoin) {
+                    this.player.pay(burnishPrice);
+                    this.unloadEquip(equip.type);
+                    equip.burnish();
+                    this.log("打磨成功");
+                    this.$message({message: "打磨成功"});
+                    this.equipFn(equip);
+                } else {
+                    this.log("金币不足");
+                    this.$message({message: "金币不足"});
                 }
             },
             autoEquip () {
