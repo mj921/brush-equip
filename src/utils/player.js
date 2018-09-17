@@ -2,7 +2,7 @@ import Character from './character';
 import { deepCopy } from './util';
 import { PlayLvUpAttr } from './data';
 export default class Player extends Character{
-    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 50, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, extraAtk = 0, extraHp = 0, extraDef = 0} = {}) {
+    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 50, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, extraAtk = 0, extraHp = 0, extraDef = 0, knapsackCapacity = 100} = {}) {
         super({hp, lv, minAtk, maxAtk, def, speed, hit, dodge, crt, crtDamage});
         this.maxExp = maxExp;
         this.currExp = currExp;
@@ -16,6 +16,7 @@ export default class Player extends Character{
         this.calculationBaseAttr();
         this.goldCoin = goldCoin;
         this.knapsack = [];
+        this.knapsackCapacity = knapsackCapacity;
         this.equips = {
             Weapon: null,
             Helmet: null,
@@ -27,10 +28,11 @@ export default class Player extends Character{
             Ring: null,
             Trousers: null
         }
+        this.messageHandles = [];
     }
     getExp (exp) {
         this.currExp += exp;
-        if (this.currExp >= this.maxExp) {
+        while (this.currExp >= this.maxExp) {
             this.levelUp();
         }
         this.save();
@@ -49,10 +51,20 @@ export default class Player extends Character{
             this[key] += PlayLvUpAttr[key];
         })
         this.calculationBaseAttr();
+        this.sendMsg(`等级提升至 ${this.lv}`);
         this.save();
     }
     getEquips (equips) {
-        this.knapsack = this.knapsack.concat(equips);
+        let knapsack = this.knapsack.concat(equips);
+        this.knapsack = knapsack.slice(0, this.knapsackCapacity);
+        let goldCoin = 0;
+        knapsack.slice(this.knapsackCapacity, knapsack.length).forEach(equip => {
+            goldCoin += equip.price;
+        })
+        this.getGoldCoin(goldCoin);
+        if (goldCoin > 0) {
+            this.sendMsg(`出售 ${knapsack.length - this.knapsackCapacity} 件装备, 共获得 ${goldCoin} 金币`);
+        }
         this.save();
     }
     calculationBaseAttr () {
@@ -197,5 +209,13 @@ export default class Player extends Character{
             name: "暴击伤害"
         })
         return arr;
+    }
+    sendMsg (msg) {
+        this.messageHandles.forEach(fn => {
+            fn && fn(msg);
+        });
+    }
+    receiveMsg (fn) {
+        this.messageHandles.push(fn);
     }
 }

@@ -227,16 +227,19 @@ export default {
             let enemy = new Enemy("Slime", this.onHookEnemyLv, this.enemyLv);
             let damage = this.player.getOnHookDamage(enemy);
             let enemyDamage = enemy.getOnHookDamage(this.player);
-            let time1 = Math.floor(enemy.hp / damage) * 1000 / this.onHookProfitMultipleRate * this.player.interval;
-            let enemyDamageTotal = Math.floor(time1 / enemy.interval) / 1000 * enemyDamage;
+            let time1 = Math.floor(enemy.hp / damage) * 5000 / this.onHookProfitMultipleRate * this.player.interval;
+            let enemyDamageTotal = Math.floor(time1 / enemy.interval) / 5000 * enemyDamage;
             let time2 = Math.floor((enemyDamageTotal > this.player.hp ? 100 : enemyDamageTotal / this.player.hp * 100) / this.recoverySpeed * 1000);
             let num = Math.floor((now - later) / (time1 + time2));
             let equips = [];
+            let exp = 0;
             for (let i = 0; i < num; i++) {
                 equips.push(enemy.fallDownEquipment());
+                exp += enemy.exp;
             }
             this.player.getEquips(equips);
-            this.log(`挂机共获得 ${equips.length} 件装备`);
+            this.player.getExp(exp);
+            this.log(`挂机共获得 ${equips.length} 件装备, 经验 ${exp}`);
         },
         isMinStatus() {
             var isMin = false;
@@ -298,6 +301,9 @@ export default {
         // this.autoFightFlag = (localStorage.getItem("autoFightFlag") && localStorage.getItem("autoFightFlag") !== "false") || false;
         this.enemyLv = localStorage.getItem("enemyLv") ? +localStorage.getItem("enemyLv") : 1;
         this.enemyNum = localStorage.getItem("enemyNum") ? +localStorage.getItem("enemyNum") : 0;
+        this.player.receiveMsg(msg => {
+            this.log(msg);
+        })
         this.calculationOnHookProfit();
         this.createEnemys();
     }
