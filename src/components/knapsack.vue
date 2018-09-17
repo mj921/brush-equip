@@ -145,18 +145,21 @@
                     let saleEquips = this.player.knapsack.filter(equip => saleQuality.indexOf(equip.quality) > -1);
                     saleEquips.forEach(equip => {this.sale(equip)});
                 }
+                this.closeMultSale();
             },
             allSale () {
                 let equips = [].concat(this.player.knapsack);
                 equips.forEach(equip => {
                     this.sale(equip);
                 })
+                this.closeMultSale();
             },
             intelligenceSale () {
                 let equips = this.player.knapsack.filter(equip => this.player.getCurrEquipPower(equip) < this.player.getCombatPower());
                 equips.forEach(equip => {
                     this.sale(equip);
                 })
+                this.closeMultSale();
             },
             strengthen (equip) {
                 let strengthenPrice = equip.getStrengthenPrice();

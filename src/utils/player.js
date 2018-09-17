@@ -51,19 +51,48 @@ export default class Player extends Character{
             this[key] += PlayLvUpAttr[key];
         })
         this.calculationBaseAttr();
-        this.sendMsg(`等级提升至 ${this.lv}`);
+        this.sendMsg(`等级提升至 ${this.lv} 级`);
         this.save();
     }
-    getEquips (equips) {
+    getEquips (equips, saleEquipRule) {
+        console.log(equips, saleEquipRule)
+        let goldCoin = 0;
+        let saleNum = 0;
+        if (saleEquipRule) {
+            if (saleEquipRule === "auto") {
+                let es = [];
+                equips.forEach(equip => {
+                    if (es.length < this.knapsackCapacity && this.getCurrEquipPower(equip) > this.getCombatPower()) {
+                        es.push(equip);
+                    } else {
+                        goldCoin += equip.price;
+                        saleNum++;
+                    }
+                })
+                equips = es;
+            } else {
+                equips = equips.filter(equip => {
+                    if (equip.type !== saleEquipRule) {
+                        return true;
+                    } else {
+                        goldCoin += equip.price;
+                        saleNum++;
+                        return false;
+                    }
+                })
+            }
+        }
         let knapsack = this.knapsack.concat(equips);
         this.knapsack = knapsack.slice(0, this.knapsackCapacity);
         if (knapsack.length > this.knapsackCapacity) {
-            let goldCoin = 0;
+            saleNum += knapsack.length - this.knapsackCapacity;
             knapsack.slice(this.knapsackCapacity, knapsack.length).forEach(equip => {
                 goldCoin += equip.price;
             })
             this.getGoldCoin(goldCoin);
-            this.sendMsg(`出售 ${knapsack.length - this.knapsackCapacity} 件装备, 共获得 ${goldCoin} 金币`);
+        }
+        if (saleNum > 0) {
+            this.sendMsg(`出售 ${saleNum} 件装备, 共获得 ${goldCoin} 金币`);
         }
         this.save();
     }

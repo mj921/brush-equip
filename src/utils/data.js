@@ -2,12 +2,12 @@
 export const Color = {
     Gray: "#bbb",
     Black: "#000",
-    Green: "#72E729",
+    Green: "#7FFF00",
     Blue: "#15A5F3",
     Violet: "#B828F4", // 紫色
-    Yellow: "#F8FA20",
-    Red: "#F32020",
-    DarkGold: "#F67712"
+    Yellow: "#FFD700",
+    Red: "#FF0000",
+    DarkGold: "#D2691E"
 }
 // 怪物词缀
 export const Suffix = {

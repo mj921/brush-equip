@@ -8,6 +8,7 @@
                 <button @click="showPlayerAttr">属性</button>
                 <button @click="changeAutoFight">{{autoFightFlag ? '关闭自动' : '自动战斗'}}</button>
                 <button @click="initGame">重新开始</button>
+                <button @click="showSetting">设置</button>
             </div>
             <div class="fr button-group-right">
                 怪物等级：{{enemyLv}}<br/>
@@ -17,6 +18,7 @@
         <be-fight-info :msgList="msgList"></be-fight-info>
         <be-knapsack :player="player" :visible.sync="knapsackVisible"></be-knapsack>
         <be-player-attr :player="player" :visible.sync="playerAttrVisible"></be-player-attr>
+        <be-setting :visible.sync="settingVisible" :saleEquipRule.sync="saleEquipRule"></be-setting>
     </div>
 </template>
 
@@ -29,6 +31,7 @@ import BeEnemyInfo from '@/components/enemy-info.vue';
 import BeFightInfo from '@/components/fight-info.vue';
 import BeKnapsack from '@/components/knapsack.vue';
 import BePlayerAttr from '@/components/playerAttr.vue';
+import BeSetting from '@/components/setting.vue';
 import { ProbabilityEnemyNum, NormalProbabilityEnemySuffix, ProbabilityArr } from '@/utils/data';
 import { deepCopy, millisecondFmt } from '@/utils/util';
 export default {
@@ -43,15 +46,16 @@ export default {
             inBattleFlag: false,
             knapsackVisible: false,
             playerAttrVisible: false,
-            fightInfo: [],
-            msgList: [],
-            enemyLv: 1,
-            enemyNum: 0,
-            enemyNumMax: 10,
-            enemyStos: [],
-            playerSto: null,
-            onHookEnemyLv: "Puniness",
-            onHookProfitMultipleRate: 1
+            settingVisible: false,
+            msgList: [], // 面板信息列表
+            enemyLv: 1, // 当前怪物等级
+            enemyNum: 0, // 当前级别怪物进度
+            enemyNumMax: 10, // 每个级别怪物数量
+            enemyStos: [], // 怪物战斗定时器
+            playerSto: null, // 玩家战斗定时器
+            onHookEnemyLv: "Puniness", // 离线怪物词缀
+            onHookProfitMultipleRate: 1, // 离线收益倍率
+            saleEquipRule: "" // 自动出售设置
         }
     },
     methods: {
@@ -61,6 +65,7 @@ export default {
                 clearTimeout(sto);
             });
         },
+        // 战斗
         fight () {
             this.inBattleFlag = true;
             let currEnemyIdx = 0;
@@ -103,14 +108,16 @@ export default {
                 }, enemy.interval * 1000 / this.gameSpeed);
             })
         },
+        // 掉落
         fallDownEquipment () {
             let equips = [];
             this.enemys.forEach(enemy => {
                 equips.push(enemy.fallDownEquipment());
             })
             this.log(`获得 ${equips.map(equip => '<span style="color: ' + equip.equipQuality.color + '">' + equip.getName() + '</span>').join('、')}`)
-            this.player.getEquips(equips);
+            this.player.getEquips(equips, this.saleEquipRule);
         },
+        // 获得经验
         getExp () {
             let exp = 0;
             this.enemys.forEach(enemy => {
@@ -118,9 +125,11 @@ export default {
             })
             this.player.getExp(exp);
         },
+        // 保存当前时间戳
         saveTime () {
             localStorage.setItem("saveTime", new Date().getTime());
         },
+        // 战斗失败
         loss () {
             this.saveTime();
             this.log("战斗失败");
@@ -140,6 +149,7 @@ export default {
                 this.inBattleFlag = false;
             });
         },
+        // 战斗胜利
         victory () {
             this.saveTime();
             this.log("战斗胜利");
@@ -158,6 +168,7 @@ export default {
                 this.inBattleFlag = false;
             });
         },
+        // 创建多个怪物
         createEnemys () {
             this.enemys = [];
             let proEnemyNumArr = ProbabilityArr(ProbabilityEnemyNum);
@@ -180,6 +191,7 @@ export default {
                 this.fight();
             }
         },
+        // 创建怪物
         createEnemy () {
             let norProEnemySuffixArr = ProbabilityArr(NormalProbabilityEnemySuffix);
             let total = norProEnemySuffixArr.reduce((total, num) => {
@@ -196,12 +208,12 @@ export default {
             }
         },
         showKnapsack () {
-            this.isMinStatus();
             this.knapsackVisible = true;
         },
         showPlayerAttr () {
             this.playerAttrVisible = true;
         },
+        // 切换自动战斗
         changeAutoFight () {
             this.autoFightFlag = !this.autoFightFlag;
             if (this.autoFightFlag && !this.inBattleFlag) {
@@ -209,9 +221,11 @@ export default {
             }
             localStorage.setItem("autoFightFlag", this.autoFightFlag);
         },
+        // 向消息面板添加信息
         log (msg) {
             this.msgList.push(msg);
         },
+        // 初始化游戏
         initGame () {
             localStorage.clear();
             this.clearSto();
@@ -219,7 +233,9 @@ export default {
             this.enemyNum = 0;
             this.player = new Player();
             this.createEnemys();
+            this.saleEquipRule = "";
         },
+        // 计算离线收益
         calculationOnHookProfit () {
             let now = new Date().getTime();
             let later = +localStorage.getItem("saveTime");
@@ -237,19 +253,12 @@ export default {
                 equips.push(enemy.fallDownEquipment());
                 exp += enemy.exp;
             }
-            this.player.getEquips(equips);
+            this.player.getEquips(equips, this.saleEquipRule);
             this.player.getExp(exp);
             this.log(`挂机 ${millisecondFmt(now - later)}, 共获得 ${equips.length} 件装备, 经验 ${exp}`);
         },
-        isMinStatus() {
-            var isMin = false;
-                if (window.outerWidth != undefined) {
-                isMin = window.outerWidth <= 160 && window.outerHeight <= 27;
-            }
-            else {
-                isMin = window.screenTop < -30000 && window.screenLeft < -30000;
-            }
-            return isMin;
+        showSetting () {
+            this.settingVisible = true;
         }
     },
     provide () {
@@ -262,7 +271,8 @@ export default {
         BeEnemyInfo,
         BeFightInfo,
         BeKnapsack,
-        BePlayerAttr
+        BePlayerAttr,
+        BeSetting
     },
     created () {
         var fontSizeChangePage = function () {
@@ -301,9 +311,11 @@ export default {
         // this.autoFightFlag = (localStorage.getItem("autoFightFlag") && localStorage.getItem("autoFightFlag") !== "false") || false;
         this.enemyLv = localStorage.getItem("enemyLv") ? +localStorage.getItem("enemyLv") : 1;
         this.enemyNum = localStorage.getItem("enemyNum") ? +localStorage.getItem("enemyNum") : 0;
+        // 接收player的消息
         this.player.receiveMsg(msg => {
             this.log(msg);
         })
+        this.saleEquipRule = localStorage.getItem("saleEquipRule") || "";
         this.calculationOnHookProfit();
         this.createEnemys();
     }
