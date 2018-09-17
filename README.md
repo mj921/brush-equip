@@ -44,3 +44,9 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 6. ~~消息提示~~
 7. ~~装备栏显示装备类型~~
 8. 成就系统
+9. 装备打磨
+10. 记录数据
+    * ~~怪物击杀数量 (各词缀怪物分别记录)~~
+    * ~~装备掉落记录 (各品质装备分别记录)~~
+    * ~~累计金币掉落记录~~
+    * ~~最高怪物等级记录~~

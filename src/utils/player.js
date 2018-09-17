@@ -1,6 +1,6 @@
 import Character from './character';
 import { deepCopy } from './util';
-import { PlayLvUpAttr } from './data';
+import { PlayLvUpAttr, EquipQuality } from './data';
 export default class Player extends Character{
     constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 70, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, extraAtk = 0, extraHp = 0, extraDef = 0, knapsackCapacity = 100} = {}) {
         super({hp, lv, minAtk, maxAtk, def, speed, hit, dodge, crt, crtDamage});
@@ -29,6 +29,19 @@ export default class Player extends Character{
             Shoes: null
         }
         this.messageHandles = [];
+        console.log(11);
+        this.equipFallDownNum = localStorage.getItem("equipFallDownNum") ?
+            JSON.parse(localStorage.getItem("equipFallDownNum")) :
+            (() => {
+                let obj = {};
+                Object.keys(EquipQuality).forEach(key => {
+                    obj[key] = 0;
+                })
+                return obj
+            })();
+
+        console.log(22);
+        this.totalGoldCoin = +localStorage.getItem("totalGoldCoin") || 0;
     }
     getExp (exp) {
         this.currExp += exp;
@@ -39,6 +52,8 @@ export default class Player extends Character{
     }
     getGoldCoin (goldCoin) {
         this.goldCoin += goldCoin;
+        this.totalGoldCoin += goldCoin;
+        localStorage.setItem("goldCoin", this.goldCoin);
     }
     pay (goldCoin) {
         this.goldCoin -= goldCoin;
@@ -55,7 +70,10 @@ export default class Player extends Character{
         this.save();
     }
     getEquips (equips, saleEquipRule) {
-        console.log(equips, saleEquipRule)
+        equips.forEach(equip => {
+            this.equipFallDownNum[equip.type]++;
+        })
+        localStorage.setItem("equipFallDownNum", JSON.stringify(this.equipFallDownNum));
         let goldCoin = 0;
         let saleNum = 0;
         if (saleEquipRule) {

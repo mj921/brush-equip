@@ -32,7 +32,7 @@ import BeFightInfo from '@/components/fight-info.vue';
 import BeKnapsack from '@/components/knapsack.vue';
 import BePlayerAttr from '@/components/playerAttr.vue';
 import BeSetting from '@/components/setting.vue';
-import { ProbabilityEnemyNum, NormalProbabilityEnemySuffix, ProbabilityArr } from '@/utils/data';
+import { ProbabilityEnemyNum, NormalProbabilityEnemySuffix, ProbabilityArr, Suffix } from '@/utils/data';
 import { deepCopy, millisecondFmt } from '@/utils/util';
 export default {
     name: 'App',
@@ -55,7 +55,9 @@ export default {
             playerSto: null, // 玩家战斗定时器
             onHookEnemyLv: "Puniness", // 离线怪物词缀
             onHookProfitMultipleRate: 1, // 离线收益倍率
-            saleEquipRule: "" // 自动出售设置
+            saleEquipRule: "", // 自动出售设置
+            killEnemyNum: {},
+            maxEnemyLv: 1
         }
     },
     methods: {
@@ -160,6 +162,10 @@ export default {
             } else {
                 this.enemyLv++;
                 this.enemyNum = 0;
+                if (this.enemyLv > this.maxEnemyLv) {
+                    this.maxEnemyLv = this.enemyLv;
+                    localStorage.setItem("maxEnemyLv", this.maxEnemyLv)
+                }
             }
             localStorage.setItem("enemyLv", this.enemyLv);
             localStorage.setItem("enemyNum", this.enemyNum);
@@ -234,11 +240,19 @@ export default {
             this.player = new Player();
             this.createEnemys();
             this.saleEquipRule = "";
+            this.killEnemyNum = (() => {
+                let obj = {};
+                Object.keys(Suffix).forEach(key => {
+                    obj[key] = 0;
+                })
+                return obj
+            })();
+            this.maxEnemyLv = 1;
         },
         // 计算离线收益
         calculationOnHookProfit () {
             let now = new Date().getTime();
-            let later = +localStorage.getItem("saveTime");
+            let later = +localStorage.getItem("saveTime") || now;
             localStorage.setItem("saveTime", now);
             let enemy = new Enemy("Slime", this.onHookEnemyLv, this.enemyLv);
             let damage = this.player.getOnHookDamage(enemy);
@@ -316,6 +330,16 @@ export default {
             this.log(msg);
         })
         this.saleEquipRule = localStorage.getItem("saleEquipRule") || "";
+        this.killEnemyNum = localStorage.getItem("killEnemyNum") ?
+            JSON.parse(localStorage.getItem("killEnemyNum")) :
+            (() => {
+                let obj = {};
+                Object.keys(Suffix).forEach(key => {
+                    obj[key] = 0;
+                })
+                return obj
+            })();
+        this.maxEnemyLv = localStorage.getItem("maxEnemyLv") ? +localStorage.getItem("maxEnemyLv") : 1;
         this.calculationOnHookProfit();
         this.createEnemys();
     }
