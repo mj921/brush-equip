@@ -32,7 +32,7 @@ import BeFightInfo from '@/components/fight-info.vue';
 import BeKnapsack from '@/components/knapsack.vue';
 import BePlayerAttr from '@/components/playerAttr.vue';
 import BeSetting from '@/components/setting.vue';
-import { ProbabilityEnemyNum, NormalProbabilityEnemySuffix, ProbabilityArr, Suffix } from '@/utils/data';
+import { NormalProbabilityEnemyNum, NormalProbabilityEnemySuffix, BossProbabilityEnemyNum, BossProbabilityEnemySuffix, ProbabilityArr, Suffix } from '@/utils/data';
 import { deepCopy, millisecondFmt } from '@/utils/util';
 export default {
     name: 'App',
@@ -177,7 +177,7 @@ export default {
         // 创建多个怪物
         createEnemys () {
             this.enemys = [];
-            let proEnemyNumArr = ProbabilityArr(ProbabilityEnemyNum);
+            let proEnemyNumArr = ProbabilityArr(this.enemyNum === this.enemyNumMax - 1 ? BossProbabilityEnemyNum : NormalProbabilityEnemyNum);
             let total = proEnemyNumArr.reduce((total, num) => {
                 return (typeof total === "number" ? total : total.value) + num.value;
             })
@@ -199,16 +199,16 @@ export default {
         },
         // 创建怪物
         createEnemy () {
-            let norProEnemySuffixArr = ProbabilityArr(NormalProbabilityEnemySuffix);
-            let total = norProEnemySuffixArr.reduce((total, num) => {
+            let proEnemySuffixArr = ProbabilityArr(this.enemyNum === this.enemyNumMax - 1 ? BossProbabilityEnemySuffix : NormalProbabilityEnemySuffix);
+            let total = proEnemySuffixArr.reduce((total, num) => {
                 return (typeof total === "number" ? total : total.value) + num.value;
             })
             let currP = Math.floor(Math.random() * total);
             let num = 1;
-            for (let i = 0; i < norProEnemySuffixArr.length; i++) {
-                currP -= norProEnemySuffixArr[i].value;
+            for (let i = 0; i < proEnemySuffixArr.length; i++) {
+                currP -= proEnemySuffixArr[i].value;
                 if (currP < 0) {
-                    this.enemys.push(new Enemy("Slime", norProEnemySuffixArr[i].key, this.enemyLv));
+                    this.enemys.push(new Enemy("Slime", proEnemySuffixArr[i].key, this.enemyLv));
                     break;
                 }
             }

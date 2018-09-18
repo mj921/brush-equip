@@ -50,3 +50,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
     * ~~装备掉落记录 (各品质装备分别记录)~~
     * ~~累计金币掉落记录~~
     * ~~最高怪物等级记录~~
+11. 每个怪物等级增加boss

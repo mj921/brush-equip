@@ -21,10 +21,18 @@ export const Suffix = {
     ElitesBoss: {color: Color.DarkGold, num: 7, name: "精英首领", addLv: 16}
 }
 // 怪物数量几率
-export const ProbabilityEnemyNum = {
+export const NormalProbabilityEnemyNum = {
     1: 725,
     2: 250,
     3: 20,
+    4: 4,
+    5: 1
+}
+// 怪物数量几率
+export const BossProbabilityEnemyNum = {
+    1: 980,
+    2: 10,
+    3: 5,
     4: 4,
     5: 1
 }
@@ -38,6 +46,17 @@ export const NormalProbabilityEnemySuffix = {
     Boss: 3,
     VariationBoss: 2,
     ElitesBoss: 1
+}
+// 普通怪物词缀几率
+export const BossProbabilityEnemySuffix = {
+    Puniness: 0,
+    Normal: 0,
+    Variation: 3000,
+    Elites: 6770,
+    Head: 170,
+    Boss: 30,
+    VariationBoss: 20,
+    ElitesBoss: 10
 }
 // 生成概率数组
 export const ProbabilityArr = (probability) => {
