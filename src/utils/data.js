@@ -11,14 +11,14 @@ export const Color = {
 }
 // 怪物词缀
 export const Suffix = {
-    Puniness: {color: Color.Gray, num: 0, name: "弱小", addLv: -2},
-    Normal: {color: Color.Black, num: 1, name: "普通", addLv: 0},
-    Variation: {color: Color.Green, num: 2, name: "变异", addLv: 1},
-    Elites: {color: Color.Blue, num: 3, name: "精英", addLv: 2},
-    Head: {color: Color.Violet, num: 4, name: "头目", addLv: 4},
-    Boss: {color: Color.Yellow, num: 5, name: "首领", addLv: 8},
-    VariationBoss: {color: Color.Red, num: 6, name: "变异首领", addLv: 12},
-    ElitesBoss: {color: Color.DarkGold, num: 7, name: "精英首领", addLv: 16}
+    Puniness: {color: Color.Gray, name: "弱小", addLv: -2},
+    Normal: {color: Color.Black, name: "普通", addLv: 0},
+    Variation: {color: Color.Green, name: "变异", addLv: 1},
+    Elites: {color: Color.Blue, name: "精英", addLv: 2},
+    Head: {color: Color.Violet, name: "头目", addLv: 4},
+    Boss: {color: Color.Yellow, name: "首领", addLv: 8},
+    VariationBoss: {color: Color.Red, name: "变异首领", addLv: 12},
+    ElitesBoss: {color: Color.DarkGold, name: "精英首领", addLv: 16}
 }
 // 怪物数量几率
 export const NormalProbabilityEnemyNum = {
@@ -78,7 +78,7 @@ export const EquipType = {
     Ring: {name: "戒指", code: "Ring"},
     Trousers: {name: "裤子", code: "Trousers"}
 }
-// 装备品质
+// 装备品质 [attrAddition: 基础属性倍率(打磨、洗炼、强化价格也通过这个计算), additionalAttrNum: 装备额外属性数量]
 export const EquipQuality = {
     Inferior: {name: "劣质", color: Color.Gray, additionalAttrNum: 0, code: "Inferior", attrAddition: 0.8},
     Normal: {name: "普通", color: Color.Black, additionalAttrNum: 0, code: "Normal", attrAddition: 1},
