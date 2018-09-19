@@ -40,6 +40,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * ~~自动出售~~
 * ~~装备打磨~~
 * ~~每次提升怪物等级需要通过boss~~
+* ~~增加怪物模拟战斗~~
 * 挂机离线升级
     * 挂机怪物品质
     * 挂机恢复速度
@@ -55,4 +56,3 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 增加装备
 * 增加怪物种类
 * 增加宠物系统
-* 增加怪物模拟战斗
