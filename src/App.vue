@@ -304,6 +304,10 @@ export default {
         BeSetting,
         BeSimulationFight
     },
+    mounted () {
+        this.calculationOnHookProfit();
+        this.createEnemys();
+    },
     created () {
         var fontSizeChangePage = function () {
             var p = (document.body && document.body.clientWidth || document.getElementsByTagName("html")[0].offsetWidth) / 750;
@@ -356,9 +360,6 @@ export default {
                 return obj
             })();
         this.maxEnemyLv = localStorage.getItem("maxEnemyLv") ? +localStorage.getItem("maxEnemyLv") : 1;
-        this.calculationOnHookProfit();
-        this.createEnemys();
-        console.log(process.env.NODE_ENV);
     }
 }
 </script>
