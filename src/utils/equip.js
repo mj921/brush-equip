@@ -3,7 +3,7 @@ import { deepCopy, probRandom } from './util';
 import EquipData from './equipData';
 export default class Equip {
     // constructor ({type = "Weapon", quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = []}) {
-    constructor ({id = "ID1", accordingToId = true, quality = "Normal", lv = 1, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = [], lockFlag = false, strengthenLv = 0, equipData = {}}) {
+    constructor ({id = "ID1", accordingToId = true, quality = "Normal", lv = 1, intervalBase = 0, minAtk = 0, maxAtk = 0, hp = 0, def = 0, speed = 0, hit = 0, dodge = 0, crt = 0, crtDamage = 0, extraAttr = [], lockFlag = false, strengthenLv = 0, equipData = {}}) {
         if (accordingToId) {
             this.id = id;
             this.lv = lv;
@@ -23,6 +23,9 @@ export default class Equip {
                     this.equipData[key][1] = Math.floor(this.equipData[key][1] * this.equipQuality.attrAddition);
                 }
             })
+            if (this.equipData.intervalBase) {
+                this.intervalBase = this.equipData.intervalBase;
+            }
             this.type = this.equipData.type.code;
             this.equipType = this.equipData.type;
             this.createBaseAttr();
@@ -36,6 +39,7 @@ export default class Equip {
             this.quality = quality;
             this.equipQuality = EquipQuality[quality];
             this.lv = lv;
+            this.intervalBase = intervalBase;
             this.minAtk = minAtk;
             this.maxAtk = maxAtk;
             this.hp = hp;
@@ -78,7 +82,7 @@ export default class Equip {
         this.crtDamage = this.equipData.crtDamage ? probRandom(this.equipData.crtDamage) : 0;
     }
     getName () {
-        return this.equipQuality.name + "的" + this.equipType.name;
+        return this.equipQuality.name + "的" + (this.equipData.name || this.equipType.name);
     }
     getColor () {
         return this.equipQuality.color;
@@ -115,6 +119,12 @@ export default class Equip {
     // 显示使用
     getBaseInfo () {
         let arr = [];
+        if (this.intervalBase) {
+            arr.push({
+                value: this.intervalBase + "秒 / 次",
+                name: "武器攻速"
+            })
+        }
         if (this.minAtk || this.maxAtk) {
             arr.push({
                 value: this.minAtk + " - " + this.maxAtk,
@@ -184,6 +194,12 @@ export default class Equip {
     // 计算使用
     getBaseInfoCalculation () {
         let arr = [];
+        if (this.intervalBase) {
+            arr.push({
+                value: this.intervalBase,
+                code: "intervalBase"
+            })
+        }
         if (this.minAtk) {
             arr.push({
                 value: this.minAtk + this.getStrengthenAttr(this.minAtk),

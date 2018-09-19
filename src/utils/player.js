@@ -124,7 +124,11 @@ export default class Player extends Character{
             let oldEquip = this.equips[equip.type];
             this.knapsack.splice(this.knapsack.indexOf(equip), 1, oldEquip);
             oldEquip.getBaseInfoCalculation().forEach(attr => {
-                this[attr.code] -= attr.value;
+                if (attr.code === "intervalBase") {
+                    this.intervalBase = 1;
+                } else {
+                    this[attr.code] -= attr.value;
+                }
             })
             oldEquip.extraAttr.forEach(attr => {
                 this[attr.type.code] -= attr.value;
@@ -133,7 +137,11 @@ export default class Player extends Character{
             this.knapsack.splice(this.knapsack.indexOf(equip), 1);
         }
         equip.getBaseInfoCalculation().forEach(attr => {
-            this[attr.code] += attr.value;
+            if (attr.code === "intervalBase") {
+                this.intervalBase = attr.value;
+            } else {
+                this[attr.code] += attr.value;
+            }
         })
         equip.extraAttr.forEach(attr => {
             this[attr.type.code] += attr.value;
@@ -151,7 +159,11 @@ export default class Player extends Character{
         if (this.equips[equipType]) {
             this.knapsack.push(this.equips[equipType]);
             this.equips[equipType].getBaseInfoCalculation().forEach(attr => {
-                this[attr.code] -= attr.value;
+                if (attr.code === "intervalBase") {
+                    this.intervalBase = 1;
+                } else {
+                    this[attr.code] -= attr.value;
+                }
             })
             this.equips[equipType].extraAttr.forEach(attr => {
                 this[attr.type.code] -= attr.value;

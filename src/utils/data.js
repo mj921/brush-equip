@@ -47,13 +47,13 @@ export const NormalProbabilityEnemySuffix = {
     VariationBoss: 2,
     ElitesBoss: 1
 }
-// 普通怪物词缀几率
+// boss怪物词缀几率
 export const BossProbabilityEnemySuffix = {
     Puniness: 0,
     Normal: 0,
     Variation: 3000,
-    Elites: 6770,
-    Head: 170,
+    Elites: 6740,
+    Head: 200,
     Boss: 30,
     VariationBoss: 20,
     ElitesBoss: 10

@@ -8,6 +8,7 @@
                 <button @click="showPlayerAttr">属性</button>
                 <button @click="changeAutoFight">{{autoFightFlag ? '关闭自动' : '自动战斗'}}</button>
                 <button @click="initGame">重新开始</button>
+                <button @click="simulationFight" v-if="env === 'development'">模拟战斗</button>
                 <button @click="showSetting">设置</button>
             </div>
             <div class="fr button-group-right">
@@ -19,6 +20,9 @@
         <be-knapsack :player="player" :visible.sync="knapsackVisible"></be-knapsack>
         <be-player-attr :player="player" :visible.sync="playerAttrVisible"></be-player-attr>
         <be-setting :visible.sync="settingVisible" :saleEquipRule.sync="saleEquipRule"></be-setting>
+        <template v-if="env === 'development'">
+            <be-simulation-fight :visible.sync="simulationVisible"></be-simulation-fight>
+        </template>
     </div>
 </template>
 
@@ -34,6 +38,12 @@ import BePlayerAttr from '@/components/playerAttr.vue';
 import BeSetting from '@/components/setting.vue';
 import { NormalProbabilityEnemyNum, NormalProbabilityEnemySuffix, BossProbabilityEnemyNum, BossProbabilityEnemySuffix, ProbabilityArr, Suffix } from '@/utils/data';
 import { deepCopy, millisecondFmt } from '@/utils/util';
+
+let BeSimulationFight = null;
+if (process.env.NODE_ENV === "development") {
+    BeSimulationFight = require('@/components/simulation-fight.vue').default;
+}
+
 export default {
     name: 'App',
     data () {
@@ -57,7 +67,9 @@ export default {
             onHookProfitMultipleRate: 1, // 离线收益倍率
             saleEquipRule: "", // 自动出售设置
             killEnemyNum: {},
-            maxEnemyLv: 1
+            maxEnemyLv: 1,
+            simulationVisible: false,
+            env: process.env.NODE_ENV
         }
     },
     methods: {
@@ -273,6 +285,9 @@ export default {
         },
         showSetting () {
             this.settingVisible = true;
+        },
+        simulationFight () {
+            this.simulationVisible = true;
         }
     },
     provide () {
@@ -286,7 +301,8 @@ export default {
         BeFightInfo,
         BeKnapsack,
         BePlayerAttr,
-        BeSetting
+        BeSetting,
+        BeSimulationFight
     },
     created () {
         var fontSizeChangePage = function () {
@@ -342,6 +358,7 @@ export default {
         this.maxEnemyLv = localStorage.getItem("maxEnemyLv") ? +localStorage.getItem("maxEnemyLv") : 1;
         this.calculationOnHookProfit();
         this.createEnemys();
+        console.log(process.env.NODE_ENV);
     }
 }
 </script>
