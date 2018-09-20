@@ -56,3 +56,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 增加装备
 * 增加怪物种类
 * 增加宠物系统
+* 增加魔法伤害，魔法防御
