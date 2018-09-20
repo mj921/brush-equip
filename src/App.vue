@@ -6,6 +6,7 @@
             <div class="fl button-group-left">
                 <button @click="showKnapsack">背包</button>
                 <button @click="showPlayerAttr">属性</button>
+                <button @click="showSkill">技能</button>
                 <button @click="changeAutoFight">{{autoFightFlag ? '关闭自动' : '自动战斗'}}</button>
                 <button @click="initGame">重新开始</button>
                 <button @click="simulationFight" v-if="env === 'development'">模拟战斗</button>
@@ -20,6 +21,7 @@
         <be-knapsack :player="player" :visible.sync="knapsackVisible"></be-knapsack>
         <be-player-attr :player="player" :visible.sync="playerAttrVisible"></be-player-attr>
         <be-setting :visible.sync="settingVisible" :saleEquipRule.sync="saleEquipRule"></be-setting>
+        <be-skill-info :player="player" :visible.sync="skillVisible"></be-skill-info>
         <template v-if="env === 'development'">
             <be-simulation-fight :visible.sync="simulationVisible"></be-simulation-fight>
         </template>
@@ -30,12 +32,14 @@
 import Enemy from '@/utils/enemy';
 import Player from '@/utils/player';
 import Equip from '@/utils/equip';
+import Skill from '@/utils/skill';
 import BePlayerInfo from '@/components/player-info.vue';
 import BeEnemyInfo from '@/components/enemy-info.vue';
 import BeFightInfo from '@/components/fight-info.vue';
 import BeKnapsack from '@/components/knapsack.vue';
 import BePlayerAttr from '@/components/playerAttr.vue';
 import BeSetting from '@/components/setting.vue';
+import BeSkillInfo from '@/components/skill-info.vue';
 import { NormalProbabilityEnemyNum, NormalProbabilityEnemySuffix, BossProbabilityEnemyNum, BossProbabilityEnemySuffix, ProbabilityArr, Suffix } from '@/utils/data';
 import { deepCopy, millisecondFmt } from '@/utils/util';
 
@@ -69,6 +73,7 @@ export default {
             killEnemyNum: {},
             maxEnemyLv: 1,
             simulationVisible: false,
+            skillVisible: false,
             env: process.env.NODE_ENV
         }
     },
@@ -231,6 +236,9 @@ export default {
         showPlayerAttr () {
             this.playerAttrVisible = true;
         },
+        showSkill () {
+            this.skillVisible = true;
+        },
         // 切换自动战斗
         changeAutoFight () {
             this.autoFightFlag = !this.autoFightFlag;
@@ -302,7 +310,8 @@ export default {
         BeKnapsack,
         BePlayerAttr,
         BeSetting,
-        BeSimulationFight
+        BeSimulationFight,
+        BeSkillInfo
     },
     mounted () {
         this.calculationOnHookProfit();
@@ -341,6 +350,10 @@ export default {
                 return new Equip(item);
             })
             this.player.knapsack = arr;
+        }
+        if (localStorage.getItem("baseSkill") && localStorage.getItem("baseSkill") !== "null") {
+            let lsSkill = JSON.parse(localStorage.getItem("baseSkill"));
+            this.player.baseSkill = new Skill(lsSkill);
         }
         // this.autoFightFlag = (localStorage.getItem("autoFightFlag") && localStorage.getItem("autoFightFlag") !== "false") || false;
         this.enemyLv = localStorage.getItem("enemyLv") ? +localStorage.getItem("enemyLv") : 1;

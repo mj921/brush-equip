@@ -161,12 +161,16 @@ export const NormalProbabilityEnemyFallDown = {
 export const EquipAttributeType = {
     MinAtk: {name: "最小攻击", suffix: "", code: "minAtk"},
     MaxAtk: {name: "最大攻击", suffix: "", code: "maxAtk"},
+    MagicAtk: {name: "法强", suffix: "", code: "magicAtk"},
     Hp: {name: "生命", suffix: "", code: "hp"},
-    Def: {name: "防御", suffix: "", code: "def"},
+    Def: {name: "物抗", suffix: "", code: "def"},
+    MagicDef: {name: "魔抗", suffix: "", code: "magicDef"},
     BaseMinAtk: {name: "基础最小攻击", suffix: "", code: "baseMinAtk"},
     BaseMaxAtk: {name: "基础最大攻击", suffix: "", code: "baseMaxAtk"},
+    BaseMagicAtk: {name: "基础法强", suffix: "", code: "baseMagicAtk"},
     BaseHp: {name: "基础生命", suffix: "", code: "baseHp"},
-    BaseDef: {name: "基础防御", suffix: "", code: "baseDef"},
+    BaseDef: {name: "基础物抗", suffix: "", code: "baseDef"},
+    BaseMagicDef: {name: "基础魔抗", suffix: "", code: "baseMagicDef"},
     Speed: {name: "攻击速度", suffix: "%", code: "speed"},
     Hit: {name: "命中", suffix: "%", code: "hit"},
     Dodge: {name: "闪避", suffix: "%", code: "dodge"},
@@ -174,7 +178,9 @@ export const EquipAttributeType = {
     CrtDamage: {name: "暴击伤害", suffix: "%", code: "crtDamage"},
     ExtraAtk: {name: "额外攻击", suffix: "%", code: "extraAtk"},
     ExtraHp: {name: "额外生命", suffix: "%", code: "extraHp"},
-    ExtraDef: {name: "额外防御", suffix: "%", code: "extraDef"}
+    ExtraDef: {name: "额外物抗", suffix: "%", code: "extraDef"},
+    ExtraMagicDef: {name: "额外魔抗", suffix: "%", code: "extraMagicDef"},
+    ExtraMagicAtk: {name: "额外法强", suffix: "%", code: "extraMagicAtk"}
 }
 
 export const EquipExtraAttr = [
@@ -209,6 +215,14 @@ export const EquipExtraAttr = [
     {
         type: EquipAttributeType.ExtraAtk,
         value: [1, 5]
+    },
+    {
+        type: EquipAttributeType.ExtraMagicAtk,
+        value: [1, 5]
+    },
+    {
+        type: EquipAttributeType.ExtraMagicDef,
+        value: [1, 5]
     }
 ]
 export const PlayLvUpAttr = {
@@ -221,4 +235,14 @@ export const PlayLvUpAttr = {
 export const EquipPrice = {
     Base: 10,
     LevelIncrease: 10
+}
+
+export const DamageType = {
+    Physical: 0,
+    Magic: 1
+}
+
+export const TextDamageType = {
+    [DamageType.Physical]: "物理伤害",
+    [DamageType.Magic]: "魔法伤害"
 }

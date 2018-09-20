@@ -130,7 +130,7 @@
                         <input type="text" v-model="panel[1].enemyOpt1.maxAtk">
                     </dl>
                     <dl>
-                        防御1：
+                        物抗1：
                         <input type="text" v-model="panel[1].enemyOpt1.def">
                     </dl>
                     <dl>
@@ -167,7 +167,7 @@
                         <input type="text" v-model="panel[1].enemyOpt2.maxAtk">
                     </dl>
                     <dl>
-                        防御2：
+                        物抗2：
                         <input type="text" v-model="panel[1].enemyOpt2.def">
                     </dl>
                     <dl>

@@ -210,6 +210,14 @@ export default class Player extends Character{
             }
         })
     }
+    equipBaseSkill (skill) {
+        this.baseSkill = skill;
+        this.save();
+    }
+    unloadBaseSkill () {
+        this.baseSkill = null;
+        this.save();
+    }
     save () {
         let player = deepCopy(this);
         delete player.knapsack;
@@ -217,6 +225,7 @@ export default class Player extends Character{
         localStorage.setItem("player", JSON.stringify(player));
         localStorage.setItem("equips", JSON.stringify(this.equips));
         localStorage.setItem("knapsack", JSON.stringify(this.knapsack));
+        localStorage.setItem("baseSkill", JSON.stringify(this.baseSkill));
     }
     recoveryHp (hp) {
         this.currHp += hp;
@@ -273,7 +282,7 @@ export default class Player extends Character{
         })
         arr.push({
             value: this.def,
-            name: "防御"
+            name: "物抗"
         })
         arr.push({
             value: this.speed + "%",

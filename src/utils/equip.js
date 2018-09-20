@@ -133,6 +133,14 @@ export default class Equip {
                 strengthenAttr: this.getStrengthenAttr(this.minAtk) + "-" + this.getStrengthenAttr(this.maxAtk)
             })
         }
+        if (this.magicAtk) {
+            arr.push({
+                value: this.magicAtk,
+                round: [this.equipData.magicAtk[0], this.equipData.magicAtk[1]],
+                name: "法强",
+                strengthenAttr: this.getStrengthenAttr(this.magicAtk)
+            })
+        }
         if (this.hp) {
             arr.push({
                 value: this.hp,
@@ -145,8 +153,16 @@ export default class Equip {
             arr.push({
                 value: this.def,
                 round: [].concat(this.equipData.def.slice(0, 2)),
-                name: "防御",
+                name: "物抗",
                 strengthenAttr: this.getStrengthenAttr(this.def)
+            })
+        }
+        if (this.magicDef) {
+            arr.push({
+                value: this.magicDef,
+                round: [].concat(this.equipData.magicDef.slice(0, 2)),
+                name: "魔抗",
+                strengthenAttr: this.getStrengthenAttr(this.magicDef)
             })
         }
         if (this.speed) {
@@ -212,6 +228,12 @@ export default class Equip {
                 code: "baseMaxAtk"
             })
         }
+        if (this.magicAtk) {
+            arr.push({
+                value: this.magicAtk + this.getStrengthenAttr(this.magicAtk),
+                code: "baseMagicAtk"
+            })
+        }
         if (this.hp) {
             arr.push({
                 value: this.hp + this.getStrengthenAttr(this.hp),
@@ -222,6 +244,12 @@ export default class Equip {
             arr.push({
                 value: this.def + this.getStrengthenAttr(this.def),
                 code: "baseDef"
+            })
+        }
+        if (this.magicDef) {
+            arr.push({
+                value: this.magicDef + this.getStrengthenAttr(this.magicDef),
+                code: "baseMagicDef"
             })
         }
         if (this.speed) {

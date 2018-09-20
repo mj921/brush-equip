@@ -87,6 +87,13 @@ const EquipData = {
         intervalBase: 1.5,
         minAtk: [2, 8, 8, 9],
         maxAtk: [8, 16, 9, 10]
+    },
+    ID12: {
+        type: EquipType.Weapon,
+        lv: 1,
+        name: "法杖",
+        intervalBase: 1,
+        magic: [3, 7, 5, 6]
     }
 }
 export default EquipData;
