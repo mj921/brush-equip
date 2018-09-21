@@ -13,7 +13,7 @@
                 </template>
             </dl>
             <dl v-for="(attr, i) in equip.getBaseInfo()" :key="i">
-                {{attr.name}}：{{attr.value}} <span class="round">({{attr.round.join(" - ")}})</span> 
+                {{attr.name}}：{{attr.value}} <span class="round" v-if="attr.round">({{attr.round.join(" - ")}})</span> 
                 <span class="red-text" v-if="equip.strengthenLv > 0">({{attr.strengthenAttr}})</span>
             </dl>
         </div>

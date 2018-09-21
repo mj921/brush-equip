@@ -99,6 +99,7 @@
         inject: ["log"],
         methods: {
             showEquipDetail (equip, btnType) {
+                console.log(equip)
                 if (btnType === "equip") {
                     this.currEquip = this.player.equips[equip.type];
                     let powerUp = this.player.getCurrEquipPower(equip) - this.player.getCombatPower();

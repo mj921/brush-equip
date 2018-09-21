@@ -33,6 +33,7 @@ import Enemy from '@/utils/enemy';
 import Player from '@/utils/player';
 import Equip from '@/utils/equip';
 import Skill from '@/utils/skill';
+import EnemyData from '@/utils/enemyData';
 import BePlayerInfo from '@/components/player-info.vue';
 import BeEnemyInfo from '@/components/enemy-info.vue';
 import BeFightInfo from '@/components/fight-info.vue';
@@ -222,10 +223,11 @@ export default {
             })
             let currP = Math.floor(Math.random() * total);
             let num = 1;
+            let enemyTypeArr = Object.keys(EnemyData);
             for (let i = 0; i < proEnemySuffixArr.length; i++) {
                 currP -= proEnemySuffixArr[i].value;
                 if (currP < 0) {
-                    this.enemys.push(new Enemy("Slime", proEnemySuffixArr[i].key, this.enemyLv));
+                    this.enemys.push(new Enemy(enemyTypeArr[~~(Math.random() * enemyTypeArr.length)], proEnemySuffixArr[i].key, this.enemyLv));
                     break;
                 }
             }

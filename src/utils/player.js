@@ -249,14 +249,22 @@ export default class Player extends Character{
         if (this.equips[equip.type]) {
             let oldEquip = this.equips[equip.type];
             oldEquip.getBaseInfoCalculation().forEach(attr => {
-                p[attr.code] -= attr.value;
+                if (attr.code === "intervalBase") {
+                    p.intervalBase = 1;
+                } else {
+                    p[attr.code] -= attr.value;
+                }
             })
             oldEquip.extraAttr.forEach(attr => {
                 p[attr.type.code] -= attr.value;
             })
         }
         equip.getBaseInfoCalculation().forEach(attr => {
-            p[attr.code] += attr.value;
+            if (attr.code === "intervalBase") {
+                p.intervalBase = attr.value;
+            } else {
+                p[attr.code] += attr.value;
+            }
         })
         equip.extraAttr.forEach(attr => {
             p[attr.type.code] += attr.value;
@@ -277,12 +285,20 @@ export default class Player extends Character{
             name: "攻击"
         })
         arr.push({
+            value: this.magicAtk,
+            name: "法强"
+        })
+        arr.push({
             value: this.hp,
             name: "生命"
         })
         arr.push({
             value: this.def,
             name: "物抗"
+        })
+        arr.push({
+            value: this.magicDef,
+            name: "魔抗"
         })
         arr.push({
             value: this.speed + "%",

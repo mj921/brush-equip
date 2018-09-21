@@ -11,9 +11,10 @@ const EquipData = {
     ID2: {
         type: EquipType.Clothes,
         lv: 1,
-        name: "衣服",
+        name: "板甲",
         hp: [5, 20, 20, 25],
-        def: [2, 8, 5, 6]
+        def: [2, 8, 5, 6],
+        magicDef: [1, 4, 3, 4]
     },
     ID3: {
         type: EquipType.Helmet,
@@ -33,14 +34,16 @@ const EquipData = {
         name: "手套",
         minAtk: [0, 0, 1, 1],
         maxAtk: [1, 3, 3, 4],
-        def: [1, 5, 4, 5]
+        def: [1, 4, 3, 4],
+        magicDef: [1, 4, 3, 4]
     },
     ID6: {
         type: EquipType.Shoes,
         lv: 1,
         name: "鞋子",
         dodge: [1, 3],
-        def: [1, 3, 3, 4]
+        def: [1, 3, 3, 4],
+        magicDef: [1, 3, 3, 4]
     },
     ID7: {
         type: EquipType.Necklace,
@@ -62,7 +65,8 @@ const EquipData = {
         lv: 1,
         name: "裤子",
         hp: [3, 10, 8, 12],
-        def: [2, 6, 5, 6]
+        def: [1, 4, 3, 4],
+        magicDef: [1, 4, 3, 4]
     },
     ID10: {
         type: EquipType.Weapon,
@@ -88,12 +92,34 @@ const EquipData = {
         minAtk: [2, 8, 8, 9],
         maxAtk: [8, 16, 9, 10]
     },
-    ID12: {
+    ID13: {
         type: EquipType.Weapon,
         lv: 1,
         name: "法杖",
         intervalBase: 1,
         magic: [3, 7, 5, 6]
+    },
+    ID14: {
+        type: EquipType.Clothes,
+        lv: 1,
+        name: "布甲",
+        hp: [5, 20, 20, 25],
+        def: [1, 4, 3, 4],
+        magicDef: [2, 8, 5, 6]
+    },
+    ID15: {
+        type: EquipType.Clothes,
+        lv: 1,
+        name: "皮甲",
+        hp: [5, 20, 20, 25],
+        def: [1, 6, 4, 5],
+        magicDef: [1, 6, 4, 5]
+    },
+    ID16: {
+        type: EquipType.Helmet,
+        lv: 1,
+        name: "法师帽",
+        magicDef: [1, 5, 4, 5]
     }
 }
 export default EquipData;

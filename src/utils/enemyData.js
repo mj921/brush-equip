@@ -18,7 +18,7 @@ const enemyData = {
         maxAtkI: 5,
         defI: 16,
         expI: 1,
-        equips: ["ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9"]
+        equips: ["ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9", "ID10", "ID11", "ID12", "ID13", "ID14", "ID15", "ID16"]
     },
     Viper: {
         name: "毒蛇",
@@ -37,7 +37,7 @@ const enemyData = {
         maxAtkI: 4,
         defI: 16,
         expI: 1,
-        equips: ["ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9"]
+        equips: ["ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9", "ID10"]
     },
     Wolf: {
         name: "魔狼",
@@ -56,7 +56,7 @@ const enemyData = {
         maxAtkI: 4,
         defI: 16,
         expI: 1,
-        equips: ["ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9"]
+        equips: ["ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9", "ID10", "ID11"]
     },
     WildBoar: {
         name: "野猪",
@@ -75,7 +75,7 @@ const enemyData = {
         maxAtkI: 6,
         defI: 16,
         expI: 1,
-        equips: ["ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9"]
+        equips: ["ID4", "ID5", "ID6", "ID7", "ID8", "ID9", "ID10", "ID11", "ID12"]
     },
     Gargoyle: {
         name: "石像鬼",
@@ -94,7 +94,7 @@ const enemyData = {
         maxAtkI: 3,
         defI: 20,
         expI: 1,
-        equips: ["ID1", "ID2", "ID3", "ID4", "ID5", "ID6", "ID7", "ID8", "ID9"]
+        equips: ["ID5", "ID6", "ID7", "ID8", "ID9", "ID10", "ID11", "ID12", "ID13"]
     }
 }
 export default enemyData;
