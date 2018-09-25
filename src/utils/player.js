@@ -2,17 +2,21 @@ import Character from './character';
 import { deepCopy } from './util';
 import { PlayLvUpAttr, EquipQuality } from './data';
 export default class Player extends Character{
-    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 70, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, extraAtk = 0, extraHp = 0, extraDef = 0, knapsackCapacity = 100} = {}) {
+    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 70, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, baseMagicDef = 1, baseMagicAtk = 1, extraAtk = 0, extraHp = 0, extraDef = 0, extraMagicAtk = 0, extraMagicDef = 0, knapsackCapacity = 100} = {}) {
         super({hp, lv, minAtk, maxAtk, def, speed, hit, dodge, crt, crtDamage});
         this.maxExp = maxExp;
         this.currExp = currExp;
         this.extraAtk = extraAtk;
         this.extraDef = extraDef;
         this.extraHp = extraHp;
+        this.extraMagicAtk = extraMagicAtk;
+        this.extraMagicDef = extraMagicDef;
         this.baseMinAtk = baseMinAtk;
         this.baseMaxAtk = baseMaxAtk;
         this.baseDef = baseDef;
         this.baseHp = baseHp;
+        this.baseMagicDef = baseMagicDef;
+        this.baseMagicAtk = baseMagicAtk;
         this.calculationBaseAttr();
         this.goldCoin = goldCoin;
         this.knapsack = [];
@@ -116,6 +120,8 @@ export default class Player extends Character{
         this.minAtk = Math.floor(this.baseMinAtk * (100 + this.extraAtk) / 100);
         this.maxAtk = Math.floor(this.baseMaxAtk * (100 + this.extraAtk) / 100);
         this.def = Math.floor(this.baseDef * (100 + this.extraDef) / 100);
+        this.magicDef = Math.floor(this.baseMagicDef * (100 + this.extraMagicDef) / 100);
+        this.magicAtk = Math.floor(this.baseMagicAtk * (100 + this.extraMagicAtk) / 100);
         this.hp = Math.floor(this.baseHp * (100 + this.extraHp) / 100);
         this.interval = Math.floor(this.intervalBase * 100 -  this.speed) / 100;
     }
@@ -188,27 +194,30 @@ export default class Player extends Character{
         knapsack.sort((a, b) => {
             return this.getCurrEquipPower(b) - this.getCurrEquipPower(a);
         })
-        let equips = {
-            Weapon: null,
-            Helmet: null,
-            Necklace: null,
-            Clothes: null,
-            Glove: null,
-            Ring: null,
-            Belt: null,
-            Trousers: null,
-            Shoes: null
+        if (knapsack.length > 0) {
+            let equips = {
+                Weapon: null,
+                Helmet: null,
+                Necklace: null,
+                Clothes: null,
+                Glove: null,
+                Ring: null,
+                Belt: null,
+                Trousers: null,
+                Shoes: null
+            }
+            knapsack.forEach(equip => {
+                if (!equips[equip.type]) {
+                    equips[equip.type] = equip;
+                }
+            })
+            Object.keys(equips).forEach(key => {
+                if (equips[key]) {
+                    this.equipFn(equips[key]);
+                }
+            });
+            this.autoEquip();
         }
-        knapsack.forEach(equip => {
-            if (!equips[equip.type]) {
-                equips[equip.type] = equip;
-            }
-        })
-        Object.keys(equips).forEach(key => {
-            if (equips[key]) {
-                this.equipFn(equips[key]);
-            }
-        })
     }
     equipBaseSkill (skill) {
         this.baseSkill = skill;

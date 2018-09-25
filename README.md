@@ -31,7 +31,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 [演示地址](https://mj921.github.io/brush-equip/dist/index.html)
 
-##v1.0.0
+## v1.0.0
 
 * 挂机离线收益
 * 一键装备战斗力最高的装备
@@ -41,6 +41,9 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 装备打磨
 * 每次提升怪物等级需要通过boss
 * 开发坏境怪物模拟战斗
+
+## v1.0.1
+* 增加魔法伤害，魔法防御
 
 ### 记录数据
 * 怪物击杀数量 (各词缀怪物分别记录)
@@ -65,4 +68,4 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 增加装备
 * 增加怪物种类
 * 增加宠物系统
-* 增加魔法伤害，魔法防御
+* ~~增加魔法伤害，魔法防御~~
