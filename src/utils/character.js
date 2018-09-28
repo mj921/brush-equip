@@ -22,19 +22,19 @@ export default class Character{
     }
     // 伤害减免
     getDamageRemission (enemy) {
-        return this.def / (this.def + enemy.lv * 100);
+        return this.def / (this.def + enemy.lv * 50);
     }
     // 伤害减免
     getMagicDamageRemission (enemy) {
-        return this.magicDef / (this.magicDef + enemy.lv * 100);
+        return this.magicDef / (this.magicDef + enemy.lv * 50);
     }
     // 伤害减免 (用于计算战斗力)
     getDamageRemissionByCombatPower () {
-        return this.def / (this.def + this.lv * 100);
+        return this.def / (this.def + this.lv * 50);
     }
     // 伤害减免 (用于计算战斗力)
     getMagicDamageRemissionByCombatPower () {
-        return this.magicDef / (this.magicDef + this.lv * 100);
+        return this.magicDef / (this.magicDef + this.lv * 50);
     }
     attack (enemy) {
         let obj = {};

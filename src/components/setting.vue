@@ -14,9 +14,11 @@
                             @click="saleEquipRuleClick(item.code)"/>
                         <label :style="'color: ' + item.color" :for="'saleRule' + item.code">{{item.name}}</label>
                     </dl>
-                    <div>
-                        <button>保存</button>
-                    </div>
+                </div>
+                <div>
+                    <button @click="downloadFile">下载存档</button>
+                    <input type="file" v-show="false" name="uploadFile" ref="uploadFile" @change="uploadFileChange">
+                    <button @click="uploadFile">上传存档</button>
                 </div>
             </div>
             <div class="setting-bottom clearfix">
@@ -91,6 +93,47 @@
                     this.saleEquipRuleVal = code;
                 } else {
                     this.saleEquipRuleVal = "";
+                }
+            },
+            downloadFile () {
+                let obj = {};
+                Object.keys(localStorage).forEach(key => {
+                    if (localStorage.getItem(key) && (localStorage.getItem(key)[0] === "{" || localStorage.getItem(key)[0] === "[")) {
+                        obj[key] = JSON.parse(localStorage.getItem(key));
+                    } else {
+                        obj[key] = localStorage.getItem(key);
+                    }
+                })
+                obj["mj-brush-equip"] = true;
+                var aLink = document.createElement('a');
+                var blob = new Blob([JSON.stringify(obj)]);
+                var evt = document.createEvent("HTMLEvents");
+                aLink.download = "brush-equip.json";
+                aLink.href = URL.createObjectURL(blob);
+                aLink.click();
+            },
+            uploadFile () {
+                this.$refs.uploadFile.click();
+            },
+            uploadFileChange () {
+                if (this.$refs.uploadFile.files[0].type === "application/json") {
+                    var reader = new FileReader();
+                    reader.readAsText(this.$refs.uploadFile.files[0]);
+                    reader.onload = function (oFREvent) {
+                        let obj = JSON.parse(oFREvent.target.result);
+                        if (obj["mj-brush-equip"] === true) {
+                            localStorage.clear();
+                            delete obj["mj-brush-equip"];
+                            Object.keys(obj).forEach(key => {
+                                if (typeof obj[key] === "object") {
+                                    localStorage.setItem(key, JSON.stringify(obj[key]));
+                                } else {
+                                    localStorage.setItem(key, obj[key]);
+                                }
+                            })
+                            location.reload();
+                        }
+                    }
                 }
             }
         },

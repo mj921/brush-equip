@@ -10,6 +10,7 @@
                 <button @click="changeAutoFight">{{autoFightFlag ? '关闭自动' : '自动战斗'}}</button>
                 <button @click="initGame">重新开始</button>
                 <button @click="simulationFight" v-if="env === 'development'">模拟战斗</button>
+                <button @click="showDataStatistics">数据统计</button>
                 <button @click="showSetting">设置</button>
             </div>
             <div class="fr button-group-right">
@@ -25,6 +26,12 @@
         <template v-if="env === 'development'">
             <be-simulation-fight :visible.sync="simulationVisible"></be-simulation-fight>
         </template>
+        <be-data-statistics
+            :visible.sync="statisticsVisible"
+            :fightNum="fightNum"
+            :startTime="startTime"
+            :killEnemyTypeNum="killEnemyTypeNum"
+            :killEnemySuffixNum="killEnemySuffixNum"></be-data-statistics>
     </div>
 </template>
 
@@ -41,6 +48,7 @@ import BeKnapsack from '@/components/knapsack.vue';
 import BePlayerAttr from '@/components/playerAttr.vue';
 import BeSetting from '@/components/setting.vue';
 import BeSkillInfo from '@/components/skill-info.vue';
+import BeDataStatistics from '@/components/data-statistics.vue';
 import { NormalProbabilityEnemyNum, NormalProbabilityEnemySuffix, BossProbabilityEnemyNum, BossProbabilityEnemySuffix, ProbabilityArr, Suffix } from '@/utils/data';
 import { deepCopy, millisecondFmt } from '@/utils/util';
 
@@ -62,6 +70,7 @@ export default {
             knapsackVisible: false,
             playerAttrVisible: false,
             settingVisible: false,
+            statisticsVisible: false,
             msgList: [], // 面板信息列表
             enemyLv: 1, // 当前怪物等级
             enemyNum: 0, // 当前级别怪物进度
@@ -76,6 +85,8 @@ export default {
             maxEnemyLv: 1,
             simulationVisible: false,
             skillVisible: false,
+            fightNum: {},
+            startTime: 0,
             env: process.env.NODE_ENV
         }
     },
@@ -154,6 +165,8 @@ export default {
         loss () {
             this.saveTime();
             this.log("战斗失败");
+            this.fightNum.loss++;
+            localStorage.setItem("fightNum", JSON.stringify(this.fightNum));
             if (this.enemyNum > 0) {
                 this.enemyNum--;
             } else if (this.enemyLv > 1) {
@@ -176,6 +189,8 @@ export default {
             this.log("战斗胜利");
             this.fallDownEquipment();
             this.getExp();
+            this.fightNum.victory++;
+            localStorage.setItem("fightNum", JSON.stringify(this.fightNum));
             if (this.enemyNum < this.enemyNumMax - 1) {
                 this.enemyNum++;
             } else {
@@ -248,10 +263,18 @@ export default {
         showSkill () {
             this.skillVisible = true;
         },
+        showDataStatistics () {
+            this.statisticsVisible = true;
+        },
         // 切换自动战斗
         changeAutoFight () {
             this.autoFightFlag = !this.autoFightFlag;
             if (this.autoFightFlag && !this.inBattleFlag) {
+                console.log()
+                if (!localStorage.getItem("startTime")) {
+                    this.startTime = new Date().getTime();
+                    localStorage.setItem("startTime", this.startTime);
+                }
                 this.fight();
             }
             localStorage.setItem("autoFightFlag", this.autoFightFlag);
@@ -262,6 +285,8 @@ export default {
         },
         // 初始化游戏
         initGame () {
+            this.startTime = new Date().getTime();
+            localStorage.setItem("startTime", this.startTime);
             localStorage.clear();
             this.clearSto();
             this.enemyLv = 1;
@@ -283,6 +308,7 @@ export default {
                 })
                 return obj
             })
+            this.fightNum = { victory: 0, loss: 0, onHook: 0 };
             this.maxEnemyLv = 1;
         },
         // 计算离线收益
@@ -305,6 +331,8 @@ export default {
             }
             this.player.getEquips(equips, this.saleEquipRule);
             this.player.getExp(exp);
+            this.fightNum.onHook += num;
+            localStorage.setItem("fightNum", JSON.stringify(this.fightNum));
             this.log(`挂机 ${millisecondFmt(now - later)}, 共获得 ${equips.length} 件装备, 经验 ${exp}`);
         },
         showSetting () {
@@ -327,7 +355,8 @@ export default {
         BePlayerAttr,
         BeSetting,
         BeSimulationFight,
-        BeSkillInfo
+        BeSkillInfo,
+        BeDataStatistics
     },
     mounted () {
         this.calculationOnHookProfit();
@@ -379,25 +408,29 @@ export default {
             this.log(msg);
         })
         this.saleEquipRule = localStorage.getItem("saleEquipRule") || "";
-        this.killEnemySuffixNum = localStorage.getItem("killEnemySuffixNum") ?
-            JSON.parse(localStorage.getItem("killEnemySuffixNum")) :
-            (() => {
+        this.killEnemySuffixNum = localStorage.getItem("killEnemySuffixNum")
+            ? JSON.parse(localStorage.getItem("killEnemySuffixNum"))
+            : (() => {
                 let obj = {};
                 Object.keys(Suffix).forEach(key => {
                     obj[key] = 0;
                 })
                 return obj
             })();
-        this.killEnemyTypeNum = localStorage.getItem("killEnemyTypeNum") ?
-            JSON.parse(localStorage.getItem("killEnemyTypeNum")) :
-            (() => {
+        this.killEnemyTypeNum = localStorage.getItem("killEnemyTypeNum")
+            ? JSON.parse(localStorage.getItem("killEnemyTypeNum"))
+            : (() => {
                 let obj = {};
                 Object.keys(EnemyData).forEach(key => {
                     obj[key] = 0;
                 })
                 return obj
             })();
+        this.fightNum = localStorage.getItem("fightNum")
+                    ? JSON.parse(localStorage.getItem("fightNum"))
+                    : { victory: 0, loss: 0, onHook: 0 };
         this.maxEnemyLv = localStorage.getItem("maxEnemyLv") ? +localStorage.getItem("maxEnemyLv") : 1;
+        this.startTime = +(localStorage.getItem("startTime") || 0);
     }
 }
 </script>

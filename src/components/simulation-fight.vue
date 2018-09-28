@@ -319,7 +319,6 @@
                                 this.panel[1].enemyOpt2[key] = +this.panel[1].enemyOpt2[key];
                             }
                         })
-                        console.log(this.panel[1].enemyOpt2)
                         this.panel[1].enemy1 = new Character(this.panel[1].enemyOpt1);
                         this.panel[1].enemy2 = new Character(this.panel[1].enemyOpt2);
                         break;
