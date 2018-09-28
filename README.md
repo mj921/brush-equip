@@ -49,6 +49,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 修改了部分装备 增加了魔法伤害、魔法防御属性
 
 ## v1.0.2
+* 增加数据统计页面
+* 增加存档的下载和上传加载（只支持PC）
 
 ### 记录数据
 * 怪物击杀数量 (各词缀怪物分别记录)
