@@ -31,7 +31,8 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 [演示地址](https://mj921.github.io/brush-equip/dist/index.html)
 
-截图
+## 截图
+
 ![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic0.png)
 ![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic1.png)
 ![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic2.png)
@@ -50,12 +51,14 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 开发坏境怪物模拟战斗
 
 ## v1.0.1
+
 * 增加魔法伤害，魔法防御
 * 增加两个基础技能
 * 增加几件装备
 * 修改了部分装备 增加了魔法伤害、魔法防御属性
 
 ## v1.0.2
+
 * 增加数据统计页面
 * 增加存档的下载和上传加载（只支持PC）
 
