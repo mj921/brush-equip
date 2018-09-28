@@ -31,6 +31,13 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 [演示地址](https://mj921.github.io/brush-equip/dist/index.html)
 
+截图
+![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic0.png)
+![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic1.png)
+![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic2.png)
+![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic3.png)
+![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic4.png)
+
 ## v1.0.0
 
 * 挂机离线收益
