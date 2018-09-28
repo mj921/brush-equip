@@ -33,12 +33,11 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 ## 截图
 
-<img src="https://mj921.github.io/brush-equip/dist/game-pic/pic0.png" width="20%">
-![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic0.png)
-![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic1.png)
-![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic2.png)
-![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic3.png)
-![截图](https://mj921.github.io/brush-equip/dist/game-pic/pic4.png)
+<img src="https://mj921.github.io/brush-equip/dist/game-pic/pic0.png" width="33%">
+<img src="https://mj921.github.io/brush-equip/dist/game-pic/pic1.png" width="33%">
+<img src="https://mj921.github.io/brush-equip/dist/game-pic/pic2.png" width="33%">
+<img src="https://mj921.github.io/brush-equip/dist/game-pic/pic3.png" width="33%">
+<img src="https://mj921.github.io/brush-equip/dist/game-pic/pic4.png" width="33%">
 
 ## v1.0.0
 
