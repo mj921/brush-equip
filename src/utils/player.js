@@ -1,8 +1,38 @@
 import Character from './character';
 import { deepCopy } from './util';
-import { PlayLvUpAttr, EquipQuality } from './data';
+import { PlayLvUpAttr, EquipQuality, EquipType } from './data';
 export default class Player extends Character{
-    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 70, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, baseMagicDef = 1, baseMagicAtk = 1, extraAtk = 0, extraHp = 0, extraDef = 0, extraMagicAtk = 0, extraMagicDef = 0, knapsackCapacity = 100} = {}) {
+    /**
+     * [constructor description]
+     * @param  {Number} options.hp               [生命]
+     * @param  {Number} options.lv               [等级]
+     * @param  {Number} options.minAtk           [最小攻击]
+     * @param  {Number} options.maxAtk           [最大攻击]
+     * @param  {Number} options.def              [物抗]
+     * @param  {Number} options.speed            [攻击速度]
+     * @param  {Number} options.hit              [命中]
+     * @param  {Number} options.dodge            [闪避]
+     * @param  {Number} options.crt              [暴击]
+     * @param  {Number} options.crtDamage        [暴击伤害]
+     * @param  {Number} options.maxExp           [最大经验]
+     * @param  {Number} options.currExp          [当前经验]
+     * @param  {Number} options.goldCoin         [金币]
+     * @param  {Number} options.baseMinAtk       [基础最小攻击]
+     * @param  {Number} options.baseMaxAtk       [基础最大攻击]
+     * @param  {Number} options.baseHp           [基础生命]
+     * @param  {Number} options.baseDef          [基础物抗]
+     * @param  {Number} options.baseMagicDef     [基础魔抗]
+     * @param  {Number} options.baseMagicAtk     [基础法强]
+     * @param  {Number} options.intervalBase     [基础攻击频率]
+     * @param  {Number} options.extraAtk         [额外攻击]
+     * @param  {Number} options.extraHp          [额外生命]
+     * @param  {Number} options.extraDef         [额外物抗]
+     * @param  {Number} options.extraMagicAtk    [额外法强]
+     * @param  {Number} options.extraMagicDef    [额外魔抗]
+     * @param  {[type]} options.knapsackCapacity [背包容量]
+     * @return {[type]}                          [description]
+     */
+    constructor ({hp = 100, lv = 1, minAtk = 1, maxAtk = 5, def = 1, speed = 1, hit = 70, dodge = 0, crt = 0, crtDamage = 150, maxExp = 100, currExp = 0, goldCoin = 0, baseMinAtk = 1, baseMaxAtk = 5, baseHp = 100, baseDef = 1, baseMagicDef = 1, baseMagicAtk = 1, intervalBase = 1, extraAtk = 0, extraHp = 0, extraDef = 0, extraMagicAtk = 0, extraMagicDef = 0, knapsackCapacity = 100} = {}) {
         super({hp, lv, minAtk, maxAtk, def, speed, hit, dodge, crt, crtDamage});
         this.maxExp = maxExp;
         this.currExp = currExp;
@@ -17,6 +47,7 @@ export default class Player extends Character{
         this.baseHp = baseHp;
         this.baseMagicDef = baseMagicDef;
         this.baseMagicAtk = baseMagicAtk;
+        this.intervalBase = intervalBase;
         this.calculationBaseAttr();
         this.goldCoin = goldCoin;
         this.knapsack = [];
@@ -33,8 +64,17 @@ export default class Player extends Character{
             Shoes: null
         }
         this.messageHandles = [];
-        this.equipFallDownNum = localStorage.getItem("equipFallDownNum") ?
-            JSON.parse(localStorage.getItem("equipFallDownNum")) :
+        this.equipTypeFallDownNum = localStorage.getItem("equipTypeFallDownNum") ?
+            JSON.parse(localStorage.getItem("equipTypeFallDownNum")) :
+            (() => {
+                let obj = {};
+                Object.keys(EquipType).forEach(key => {
+                    obj[key] = 0;
+                })
+                return obj
+            })();
+        this.equipQualityFallDownNum = localStorage.getItem("equipQualityFallDownNum") ?
+            JSON.parse(localStorage.getItem("equipQualityFallDownNum")) :
             (() => {
                 let obj = {};
                 Object.keys(EquipQuality).forEach(key => {
@@ -45,6 +85,7 @@ export default class Player extends Character{
 
         this.totalGoldCoin = +localStorage.getItem("totalGoldCoin") || 0;
     }
+    // 获得经验
     getExp (exp) {
         this.currExp += exp;
         while (this.currExp >= this.maxExp) {
@@ -52,14 +93,17 @@ export default class Player extends Character{
         }
         this.save();
     }
+    // 获得金币
     getGoldCoin (goldCoin) {
         this.goldCoin += goldCoin;
         this.totalGoldCoin += goldCoin;
         localStorage.setItem("goldCoin", this.goldCoin);
     }
+    // 花费金币
     pay (goldCoin) {
         this.goldCoin -= goldCoin;
     }
+    // 升级
     levelUp () {
         this.lv++;
         this.currExp -= this.maxExp;
@@ -71,11 +115,14 @@ export default class Player extends Character{
         this.sendMsg(`等级提升至 ${this.lv} 级`);
         this.save();
     }
+    // 获得装备
     getEquips (equips, saleEquipRule) {
         equips.forEach(equip => {
-            this.equipFallDownNum[equip.type]++;
+            this.equipTypeFallDownNum[equip.type]++;
+            this.equipQualityFallDownNum[equip.quality]++;
         })
-        localStorage.setItem("equipFallDownNum", JSON.stringify(this.equipFallDownNum));
+        localStorage.setItem("equipTypeFallDownNum", JSON.stringify(this.equipTypeFallDownNum));
+        localStorage.setItem("equipQualityFallDownNum", JSON.stringify(this.equipQualityFallDownNum));
         let goldCoin = 0;
         let saleNum = 0;
         if (saleEquipRule) {
@@ -116,6 +163,7 @@ export default class Player extends Character{
         }
         this.save();
     }
+    // 计算基础属性
     calculationBaseAttr () {
         this.minAtk = Math.floor(this.baseMinAtk * (100 + this.extraAtk) / 100);
         this.maxAtk = Math.floor(this.baseMaxAtk * (100 + this.extraAtk) / 100);
@@ -125,6 +173,7 @@ export default class Player extends Character{
         this.hp = Math.floor(this.baseHp * (100 + this.extraHp) / 100);
         this.interval = Math.floor(this.intervalBase * 100 -  this.speed) / 100;
     }
+    // 装备装备
     equipFn (equip, saveFlag = true) {
         if (this.equips[equip.type]) {
             let oldEquip = this.equips[equip.type];
@@ -161,6 +210,7 @@ export default class Player extends Character{
             this.save();
         }
     }
+    // 卸下装备
     unloadEquip (equipType) {
         if (this.equips[equipType]) {
             this.knapsack.push(this.equips[equipType]);
@@ -182,11 +232,13 @@ export default class Player extends Character{
         }
         this.save();
     }
+    // 出售装备
     saleEquip (equip) {
         this.knapsack.splice(this.knapsack.indexOf(equip), 1);
         this.save();
     }
-    autoEquip () {
+    // 一键装备
+    autoEquip (n = 0) {
         let knapsack = [].concat(this.knapsack);
         knapsack = knapsack.filter(equip => {
             return this.getCurrEquipPower(equip) > this.getCombatPower();
@@ -216,7 +268,9 @@ export default class Player extends Character{
                     this.equipFn(equips[key]);
                 }
             });
-            this.autoEquip();
+            if (n < 10) {
+                this.autoEquip(++n);
+            }
         }
     }
     equipBaseSkill (skill) {

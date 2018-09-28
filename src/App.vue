@@ -71,7 +71,8 @@ export default {
             onHookEnemyLv: "Puniness", // 离线怪物词缀
             onHookProfitMultipleRate: 1, // 离线收益倍率
             saleEquipRule: "", // 自动出售设置
-            killEnemyNum: {},
+            killEnemySuffixNum: {},
+            killEnemyTypeNum: {},
             maxEnemyLv: 1,
             simulationVisible: false,
             skillVisible: false,
@@ -185,6 +186,12 @@ export default {
                     localStorage.setItem("maxEnemyLv", this.maxEnemyLv)
                 }
             }
+            this.enemys.forEach(enemy => {
+                this.killEnemySuffixNum[enemy.suffix]++;
+                this.killEnemyTypeNum[enemy.suffix]++;
+            })
+            localStorage.setItem("killEnemySuffixNum", JSON.stringify(this.killEnemySuffixNum));
+            localStorage.setItem("killEnemyTypeNum", JSON.stringify(this.killEnemyTypeNum));
             localStorage.setItem("enemyLv", this.enemyLv);
             localStorage.setItem("enemyNum", this.enemyNum);
             this.player.autoRcoveryHp(this.recoverySpeed, () => {
@@ -262,13 +269,20 @@ export default {
             this.player = new Player();
             this.createEnemys();
             this.saleEquipRule = "";
-            this.killEnemyNum = (() => {
+            this.killEnemySuffixNum = (() => {
                 let obj = {};
                 Object.keys(Suffix).forEach(key => {
                     obj[key] = 0;
                 })
                 return obj
             })();
+            this.killEnemyTypeNum = (() => {
+                let obj = {};
+                Object.keys(EquipData).forEach(key => {
+                    obj[key] = 0;
+                })
+                return obj
+            })
             this.maxEnemyLv = 1;
         },
         // 计算离线收益
@@ -365,11 +379,20 @@ export default {
             this.log(msg);
         })
         this.saleEquipRule = localStorage.getItem("saleEquipRule") || "";
-        this.killEnemyNum = localStorage.getItem("killEnemyNum") ?
-            JSON.parse(localStorage.getItem("killEnemyNum")) :
+        this.killEnemySuffixNum = localStorage.getItem("killEnemySuffixNum") ?
+            JSON.parse(localStorage.getItem("killEnemySuffixNum")) :
             (() => {
                 let obj = {};
                 Object.keys(Suffix).forEach(key => {
+                    obj[key] = 0;
+                })
+                return obj
+            })();
+        this.killEnemyTypeNum = localStorage.getItem("killEnemyTypeNum") ?
+            JSON.parse(localStorage.getItem("killEnemyTypeNum")) :
+            (() => {
+                let obj = {};
+                Object.keys(EnemyData).forEach(key => {
                     obj[key] = 0;
                 })
                 return obj

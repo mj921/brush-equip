@@ -44,6 +44,9 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 ## v1.0.1
 * 增加魔法伤害，魔法防御
+* 增加两个基础技能
+* 增加几件装备
+* 修改了部分装备 增加了魔法伤害、魔法防御属性
 
 ### 记录数据
 * 怪物击杀数量 (各词缀怪物分别记录)
@@ -61,7 +64,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 成就系统
 * 记录数据
     * ~~怪物击杀数量 (各词缀怪物分别记录)~~
-    * ~~装备掉落记录 (各品质装备分别记录)~~
+    * ~~装备掉落记录 (各类型装备分别记录, 各品质装备分别记录)~~
     * ~~累计金币掉落记录~~
     * ~~最高怪物等级记录~~
 * 技能系统

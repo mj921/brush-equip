@@ -5,9 +5,9 @@
                 <span :style="'color: ' + equip.getColor()">{{equip.getName()}} (lv: {{equip.lv}})</span> 
                 <span class="red-text" v-if="equip.strengthenLv > 0">+{{equip.strengthenLv}}</span>
             </dl>
-            <dl>
+            <dl v-if="powerUp">
                 战斗力增幅：
-                <template v-if="powerUp">
+                <template>
                     <span class="red-text" v-if="+powerUp > 0">{{powerUp}}</span>
                     <span class="green-text" v-else>{{powerUp}}</span>
                 </template>
