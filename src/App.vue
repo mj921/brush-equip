@@ -46,7 +46,7 @@ import { deepCopy, millisecondFmt } from '@/utils/util';
 import EquipData from './utils/equipData';
 
 let BeSimulationFight = null;
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
     BeSimulationFight = require('@/components/simulation-fight.vue').default;
 }
 
