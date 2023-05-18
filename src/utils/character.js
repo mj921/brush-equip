@@ -85,7 +85,7 @@ export default class Character{
         if (!this.baseSkill || this.baseSkill.damageType === DamageType.Physical) {
             damage = Math.floor((this.maxAtk + this.minAtk) / 2 * (1 - enemy.getDamageRemission(this)) * this.hit / 100 * (100 - enemy.dodge) / 100 * (1 + this.crt * this.crtDamage / 10000));
         } else {
-            damage = Math.floor(magicAtk * (1 - enemy.getMagicDamageRemission(this)) * this.hit / 100 * (100 - enemy.dodge) / 100 * (1 + this.crt * this.crtDamage / 10000));
+            damage = Math.floor(this.magicAtk * (1 - enemy.getMagicDamageRemission(this)) * this.hit / 100 * (100 - enemy.dodge) / 100 * (1 + this.crt * this.crtDamage / 10000));
         }
         return damage > 1 ? damage :1;
     }

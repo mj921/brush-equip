@@ -1,4 +1,4 @@
-import { EquipType, EquipQuality, EquipExtraAttr, EquipPrice } from './data';
+import { EquipQuality, EquipExtraAttr, EquipPrice } from './data';
 import { deepCopy, probRandom } from './util';
 import EquipData from './equipData';
 export default class Equip {

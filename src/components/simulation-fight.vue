@@ -30,13 +30,13 @@
                     <dl>
                         类型1：
                         <select v-model="panel[0].enemyType1">
-                            <option v-for="enemyType in enemyTypes" :value="enemyType.value">{{enemyType.label}}</option>
+                            <option :key="'enemyType-' + enemyType.value" v-for="enemyType in enemyTypes" :value="enemyType.value">{{enemyType.label}}</option>
                         </select>
                     </dl>
                     <dl>
                         词缀1：
                         <select v-model="panel[0].enemySuffix1">
-                            <option v-for="enemySuffix in enemySuffixs" :value="enemySuffix.value">{{enemySuffix.label}}</option>
+                            <option :key="'enemySuffix-' + enemySuffix.value" v-for="enemySuffix in enemySuffixs" :value="enemySuffix.value">{{enemySuffix.label}}</option>
                         </select>
                     </dl>
                     <dl>
@@ -56,13 +56,13 @@
                     <dl>
                         类型2：
                         <select v-model="panel[0].enemyType2">
-                            <option v-for="enemyType in enemyTypes" :value="enemyType.value">{{enemyType.label}}</option>
+                            <option :key="'enemyType2-' + enemyType.value" v-for="enemyType in enemyTypes" :value="enemyType.value">{{enemyType.label}}</option>
                         </select>
                     </dl>
                     <dl>
                         词缀2：
                         <select v-model="panel[0].enemySuffix2">
-                            <option v-for="enemySuffix in enemySuffixs" :value="enemySuffix.value">{{enemySuffix.label}}</option>
+                            <option :key="'enemySuffix2-' + enemySuffix.value" v-for="enemySuffix in enemySuffixs" :value="enemySuffix.value">{{enemySuffix.label}}</option>
                         </select>
                     </dl>
                     <dl>
@@ -334,7 +334,6 @@
             // 战斗
             fight (cb) {
                 this.initEnemy(this.tabIndex);
-                let currEnemyIdx = 0;
                 let atkFn1 = () => {
                     var ch = this.panel[this.tabIndex].enemy1.attack(this.panel[this.tabIndex].enemy2);
                     if (ch.currHp <= 0) {

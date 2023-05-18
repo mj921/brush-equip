@@ -28,11 +28,6 @@ export const millisecondFmt = time => {
         let m = Math.floor((time - h * 3600) / 60);
         let s = time % 60;
         return `${h} 小时 ${m} 分 ${s} 秒`;
-    } else if (time < 86400) {
-        let h = Math.floor(time / 3600);
-        let m = Math.floor((time - h * 3600) / 60);
-        let s = time % 60;
-        return `${h} 小时 ${m} 分 ${s} 秒`;
     } else if (time < 365 * 86400) {
         let d = Math.floor(time / 86400);
         let h = Math.floor((time - d * 86400) / 3600);

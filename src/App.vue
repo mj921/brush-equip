@@ -43,6 +43,7 @@ import BeSetting from '@/components/setting.vue';
 import BeSkillInfo from '@/components/skill-info.vue';
 import { NormalProbabilityEnemyNum, NormalProbabilityEnemySuffix, BossProbabilityEnemyNum, BossProbabilityEnemySuffix, ProbabilityArr, Suffix } from '@/utils/data';
 import { deepCopy, millisecondFmt } from '@/utils/util';
+import EquipData from './utils/equipData';
 
 let BeSimulationFight = null;
 if (process.env.NODE_ENV === "development") {
@@ -229,7 +230,6 @@ export default {
                 return (typeof total === "number" ? total : total.value) + num.value;
             })
             let currP = Math.floor(Math.random() * total);
-            let num = 1;
             let enemyTypeArr = Object.keys(EnemyData);
             for (let i = 0; i < proEnemySuffixArr.length; i++) {
                 currP -= proEnemySuffixArr[i].value;

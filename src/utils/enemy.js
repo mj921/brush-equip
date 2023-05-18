@@ -1,7 +1,7 @@
 import Character from './character';
 import EnemyData from './enemyData';
 import Equip from './equip';
-import { Suffix, Color, NormalProbabilityEnemyFallDown, EquipQuality, EquipType, ProbabilityArr } from './data';
+import { Suffix, NormalProbabilityEnemyFallDown, ProbabilityArr } from './data';
 import { deepCopy } from './util';
 export default class Enemy extends Character {
     constructor (type = "Slime", suffix = "Normal", lv = 1) {

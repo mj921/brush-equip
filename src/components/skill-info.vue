@@ -35,9 +35,6 @@
 </template>
 
 <script>
-    import BeEquipDetail from './equipDetail.vue';
-    import { EquipQuality, EquipType } from '@/utils/data';
-    import { deepCopy } from '@/utils/util';
     import { BaseSkillData } from '@/utils/skillData';
     import Skill from '@/utils/skill';
     export default {
@@ -78,9 +75,6 @@
             stopProp (e) {
                 e.stopPropagation();
             }
-        },
-        components: {
-            BeEquipDetail
         },
         created () {
             this.baseSkills = Object.keys(BaseSkillData).map(key => {

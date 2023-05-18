@@ -1,7 +1,7 @@
 <template>
     <div class="fight-info">
         <ul>
-            <li v-for="(msg, i) in msgList" v-html="msg"></li>
+            <li :key="i" v-for="(msg, i) in msgList" v-html="msg"></li>
         </ul>
     </div>
 </template>

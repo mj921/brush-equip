@@ -3,7 +3,7 @@
         <div class="container">
             <div class="main">
                 <div class="sale-rule-container">
-                    <dl v-for="item in saleEquipRuleList">
+                    <dl :key="item.code" v-for="item in saleEquipRuleList">
                         <input
                             type="checkbox"
                             :checked="item.code === saleEquipRuleVal"

@@ -1,5 +1,3 @@
-import { EquipType, EquipQuality } from './data';
-import EquipData from './equipData';
 const enemyData = {
     Slime: {
         name: "史莱姆",

@@ -54,8 +54,8 @@
             <div class="equip-info" v-show="multSaleVisible" @click="closeMultSale">
                 <div class="mult-sale-container" @click="stopProp($event)">
                     <template v-for="equipQuality in equipQualityList">
-                        <dl>
-                            <input :key="equipQuality.code" type="checkbox" v-model="equipQuality.value" :id="'multSale' + equipQuality.code"><label :for="'multSale' + equipQuality.code">{{equipQuality.name}}</label>
+                        <dl :key="equipQuality.code">
+                            <input type="checkbox" v-model="equipQuality.value" :id="'multSale' + equipQuality.code"><label :for="'multSale' + equipQuality.code">{{equipQuality.name}}</label>
                         </dl>
                     </template>
                     <div class="sale-btn-group clearfix">
