@@ -13,7 +13,6 @@
         战斗力增幅：
         <template>
           <span class="red-text" v-if="+powerUp > 0">{{ powerUp }}</span>
-
           <span class="green-text" v-else>{{ powerUp }}</span>
         </template>
       </dl>
