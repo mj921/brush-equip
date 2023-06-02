@@ -14,6 +14,7 @@
         <button @click="simulationFight" v-if="env === 'development'">
           模拟战斗
         </button>
+        <button @click="showStatistics">统计</button>
         <button @click="showSetting">设置</button>
       </div>
       <div class="fr button-group-right">
@@ -31,6 +32,13 @@
       :visible.sync="settingVisible"
       :saleEquipRule.sync="saleEquipRule"
     ></be-setting>
+    <be-statistics
+      :visible.sync="statisticsVisible"
+      :kill-enemy-suffix-num="killEnemySuffixNum"
+      :kill-enemy-type-num="killEnemyTypeNum"
+      :equip-quality-fall-down-num="equipQualityFallDownNum"
+      :equip-type-fall-down-num="equipTypeFallDownNum"
+    ></be-statistics>
     <be-skill-info
       :player="player"
       :visible.sync="skillVisible"
@@ -55,17 +63,11 @@ import BeFightInfo from '@/components/fight-info.vue';
 import BeKnapsack from '@/components/knapsack.vue';
 import BePlayerAttr from '@/components/playerAttr.vue';
 import BeSetting from '@/components/setting.vue';
+import BeStatistics from '@/components/statistics.vue';
 import BeSkillInfo from '@/components/skill-info.vue';
-import {
-  NormalProbabilityEnemyNum,
-  NormalProbabilityEnemySuffix,
-  BossProbabilityEnemyNum,
-  BossProbabilityEnemySuffix,
-  ProbabilityArr,
-  Suffix,
-} from '@/utils/data';
+import { EquipQuality, EquipType, Suffix } from '@/utils/data';
+import { createEnemys } from '@/utils/app';
 import { deepCopy, millisecondFmt } from '@/utils/util';
-import EquipData from './utils/equipData';
 
 let BeSimulationFight = null;
 if (process.env.NODE_ENV === 'development') {
@@ -85,6 +87,7 @@ export default {
       knapsackVisible: false,
       playerAttrVisible: false,
       settingVisible: false,
+      statisticsVisible: false,
       msgList: [], // 面板信息列表
       enemyLv: 1, // 当前怪物等级
       enemyNum: 0, // 当前级别怪物进度
@@ -96,6 +99,8 @@ export default {
       saleEquipRule: '', // 自动出售设置
       killEnemySuffixNum: {},
       killEnemyTypeNum: {},
+      equipTypeFallDownNum: {},
+      equipQualityFallDownNum: {},
       maxEnemyLv: 1,
       simulationVisible: false,
       skillVisible: false,
@@ -179,7 +184,7 @@ export default {
           )
           .join('、')}`
       );
-      this.player.getEquips(equips, this.saleEquipRule);
+      this.autoSaleEquips(equips);
     },
     // 获得经验
     getExp() {
@@ -231,7 +236,7 @@ export default {
       }
       this.enemys.forEach((enemy) => {
         this.killEnemySuffixNum[enemy.suffix]++;
-        this.killEnemyTypeNum[enemy.suffix]++;
+        this.killEnemyTypeNum[enemy.enemyType]++;
       });
       localStorage.setItem(
         'killEnemySuffixNum',
@@ -250,55 +255,9 @@ export default {
     },
     // 创建多个怪物
     createEnemys() {
-      this.enemys = [];
-      let proEnemyNumArr = ProbabilityArr(
-        this.enemyNum === this.enemyNumMax - 1
-          ? BossProbabilityEnemyNum
-          : NormalProbabilityEnemyNum
-      );
-      let total = proEnemyNumArr.reduce((total, num) => {
-        return (typeof total === 'number' ? total : total.value) + num.value;
-      });
-      let currP = Math.floor(Math.random() * total);
-      let num = 1;
-      for (let i = 0; i < proEnemyNumArr.length; i++) {
-        currP -= proEnemyNumArr[i].value;
-        if (currP < 0) {
-          num = +proEnemyNumArr[i].key;
-          break;
-        }
-      }
-      for (let i = 0; i < num; i++) {
-        this.createEnemy();
-      }
+      this.enemys = createEnemys(this.enemyNum, this.enemyNumMax, this.enemyLv);
       if (this.autoFightFlag) {
         this.fight();
-      }
-    },
-    // 创建怪物
-    createEnemy() {
-      let proEnemySuffixArr = ProbabilityArr(
-        this.enemyNum === this.enemyNumMax - 1
-          ? BossProbabilityEnemySuffix
-          : NormalProbabilityEnemySuffix
-      );
-      let total = proEnemySuffixArr.reduce((total, num) => {
-        return (typeof total === 'number' ? total : total.value) + num.value;
-      });
-      let currP = Math.floor(Math.random() * total);
-      let enemyTypeArr = Object.keys(EnemyData);
-      for (let i = 0; i < proEnemySuffixArr.length; i++) {
-        currP -= proEnemySuffixArr[i].value;
-        if (currP < 0) {
-          this.enemys.push(
-            new Enemy(
-              enemyTypeArr[~~(Math.random() * enemyTypeArr.length)],
-              proEnemySuffixArr[i].key,
-              this.enemyLv
-            )
-          );
-          break;
-        }
       }
     },
     showKnapsack() {
@@ -339,14 +298,86 @@ export default {
         });
         return obj;
       })();
-      this.killEnemyTypeNum = () => {
+      this.killEnemyTypeNum = (() => {
         let obj = {};
-        Object.keys(EquipData).forEach((key) => {
+        Object.keys(EnemyData).forEach((key) => {
           obj[key] = 0;
         });
         return obj;
-      };
+      })();
+
+      this.equipQualityFallDownNum = (() => {
+        let obj = {};
+        Object.keys(EquipQuality).forEach((key) => {
+          obj[key] = 0;
+        });
+        return obj;
+      })();
+
+      this.equipTypeFallDownNum = (() => {
+        let obj = {};
+        Object.keys(EquipType).forEach((key) => {
+          obj[key] = 0;
+        });
+        return obj;
+      })();
       this.maxEnemyLv = 1;
+    },
+    autoSaleEquips(equips) {
+      equips.forEach((equip) => {
+        this.equipTypeFallDownNum[equip.type]++;
+        this.equipQualityFallDownNum[equip.quality]++;
+      });
+      localStorage.setItem(
+        'equipTypeFallDownNum',
+        JSON.stringify(this.equipTypeFallDownNum)
+      );
+      localStorage.setItem(
+        'equipQualityFallDownNum',
+        JSON.stringify(this.equipQualityFallDownNum)
+      );
+      let goldCoinFilter = 0;
+      let saleNumFilter = 0;
+      let es = equips;
+      if (this.saleEquipRule) {
+        if (this.saleEquipRule === 'auto') {
+          es = equips.filter((equip) => {
+            if (
+              this.player.getCurrEquipPower(equip) >
+              this.player.getCombatPower()
+            ) {
+              return true;
+            } else {
+              goldCoinFilter += equip.price;
+              saleNumFilter++;
+              return false;
+            }
+          });
+        } else {
+          let qualityKeys = Object.keys(EquipQuality);
+          qualityKeys = qualityKeys.slice(
+            qualityKeys.indexOf(this.saleEquipRule)
+          );
+          es = equips.filter((equip) => {
+            if (qualityKeys.includes(equip.type)) {
+              return true;
+            } else {
+              goldCoinFilter += equip.price;
+              saleNumFilter++;
+              return false;
+            }
+          });
+        }
+      }
+      this.player.getGoldCoin(goldCoinFilter);
+      const { goldCoin, saleNum } = this.player.getEquips(es);
+      if (saleNum + saleNumFilter > 0) {
+        this.log(
+          `出售 ${saleNum + saleNumFilter} 件装备, 共获得 ${
+            goldCoin + goldCoinFilter
+          } 金币`
+        );
+      }
     },
     // 计算离线收益
     calculationOnHookProfit() {
@@ -376,13 +407,16 @@ export default {
         equips.push(enemy.fallDownEquipment());
         exp += enemy.exp;
       }
-      this.player.getEquips(equips, this.saleEquipRule);
+      this.autoSaleEquips(equips);
       this.player.getExp(exp);
       this.log(
         `挂机 ${millisecondFmt(now - later)}, 共获得 ${
           equips.length
         } 件装备, 经验 ${exp}`
       );
+    },
+    showStatistics() {
+      this.statisticsVisible = true;
     },
     showSetting() {
       this.settingVisible = true;
@@ -405,6 +439,7 @@ export default {
     BeSetting,
     BeSimulationFight,
     BeSkillInfo,
+    BeStatistics,
   },
   mounted() {
     this.calculationOnHookProfit();
@@ -485,6 +520,27 @@ export default {
       : (() => {
           let obj = {};
           Object.keys(EnemyData).forEach((key) => {
+            obj[key] = 0;
+          });
+          return obj;
+        })();
+    this.equipQualityFallDownNum = localStorage.getItem(
+      'equipQualityFallDownNum'
+    )
+      ? JSON.parse(localStorage.getItem('equipQualityFallDownNum'))
+      : (() => {
+          let obj = {};
+          Object.keys(EquipQuality).forEach((key) => {
+            obj[key] = 0;
+          });
+          return obj;
+        })();
+
+    this.equipTypeFallDownNum = localStorage.getItem('equipTypeFallDownNum')
+      ? JSON.parse(localStorage.getItem('equipTypeFallDownNum'))
+      : (() => {
+          let obj = {};
+          Object.keys(EquipType).forEach((key) => {
             obj[key] = 0;
           });
           return obj;
