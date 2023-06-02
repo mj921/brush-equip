@@ -40,9 +40,12 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 * 新增强化/打磨/出售价格展示
 
 * 修改战斗力计算公式
+* 降低玩家升级获得的属性
 
 * 修复装备打磨金额计算异常问题
 * 修复魔法攻击不生效问题
+* 修复离线收益装备自动出售异常问题
+* 修复重新开始异常问题
 
 ### 记录数据
 * 怪物击杀数量 (各词缀怪物分别记录)
