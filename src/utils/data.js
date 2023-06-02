@@ -226,10 +226,10 @@ export const EquipExtraAttr = [
     }
 ]
 export const PlayLvUpAttr = {
-    [EquipAttributeType.BaseMaxAtk.code]: 5,
+    [EquipAttributeType.BaseMaxAtk.code]: 3,
     [EquipAttributeType.BaseMinAtk.code]: 1,
-    [EquipAttributeType.BaseHp.code]: 50,
-    [EquipAttributeType.BaseDef.code]: 3
+    [EquipAttributeType.BaseHp.code]: 30,
+    [EquipAttributeType.BaseDef.code]: 2
 }
 
 export const EquipPrice = {
